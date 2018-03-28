@@ -12,10 +12,9 @@ public class LightController : MonoBehaviour {
         m_aiPowerScript = gameObject.GetComponent<AIPower>();
         m_lightPower = m_aiPowerScript.lightPower;
         m_lightOn = new bool[lights.Length];
+
         for (int i = 0; i < lights.Length; i++)
-        {
             m_lightOn[i] = true;
-        }
 	}
 
     public void CurrentLightPower(int newPower)
@@ -25,28 +24,20 @@ public class LightController : MonoBehaviour {
 
     public void LightSwitch(int lightNo)
     {
-        print("light switched on");
         if(m_lightOn[lightNo] == true)
         {
-            //lights[lightNo].intensity = 0f;
             lights[lightNo].enabled = false;
             m_aiPowerScript.PowerExchange(m_lightPower);
             m_lightOn[lightNo] = !m_lightOn[lightNo];
         }
         else
         {
-            if(m_aiPowerScript.CheckPower(m_lightPower) == true)
+            if(m_aiPowerScript.CheckPower(m_lightPower))
             {
-                //lights[lightNo].intensity = 3f;
                 lights[lightNo].enabled = true;
                 m_aiPowerScript.PowerExchange(-m_lightPower);
                 m_lightOn[lightNo] = !m_lightOn[lightNo];
             }
-            else
-            {
-                //no power
-            }
         }
     }
-
 }

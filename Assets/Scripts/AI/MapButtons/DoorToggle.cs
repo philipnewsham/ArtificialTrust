@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class DoorToggle : MonoBehaviour {
+
+public class DoorToggle : MonoBehaviour
+{
     public int doorID;
     public Text doorNumberText;
     private GameObject m_ai;

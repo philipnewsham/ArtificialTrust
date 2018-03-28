@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class CameraToggle : MonoBehaviour {
+
+public class CameraToggle : MonoBehaviour
+{
     public int cameraID;
     public Text cameraNumberText;
     private GameObject m_ai;
