@@ -12,11 +12,11 @@ public class AIInformation : MonoBehaviour
     void Start()
     {
         int length = informationString.Length;
+
         m_hasSeen = new bool[length];
+
         for (int i = 0; i < length; i++)
-        {
             m_hasSeen[i] = false;
-        }
     }
 
     public void SelectedPage(int pageNo)

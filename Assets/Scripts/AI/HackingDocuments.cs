@@ -37,14 +37,7 @@ public class HackingDocuments : MonoBehaviour {
 
         for (int i = 0; i < m_numberOfDocuments; i++)
         {
-            if (docUnlockedNumber[i] == 0)
-            {
-                documentButtons[i].interactable = false;
-            }
-            else
-            {
-                documentButtons[i].interactable = true;
-            }
+            documentButtons[i].interactable = (docUnlockedNumber[i] != 0);
             m_docUnlocked[i] = false;
             m_hackingValue[i] = 100 + (i * 100);
             m_startingValues[i] = m_hackingValue[i];

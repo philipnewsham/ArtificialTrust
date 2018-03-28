@@ -33,7 +33,7 @@ public class AIPower : MonoBehaviour
     public DoorToggleInstantiate m_doorToggleInstantiateScript;
     public RobotBodyPasswordButton robotBodyPasswordButtonScript;
     public Button aiSwitchButton;
-	// Use this for initialization
+
 	void Start ()
     {
         m_totalPower = totalPower;
@@ -62,15 +62,9 @@ public class AIPower : MonoBehaviour
 
     void CheckButton()
     {
-        if(m_totalPower >= m_aiSwitchButtonPower)
-        {
-            aiSwitchButton.interactable = true;
-        }
-        else
-        {
-            aiSwitchButton.interactable = false;
-        }
+        aiSwitchButton.interactable = (m_totalPower >= m_aiSwitchButtonPower);
     }
+
     void CheckLights()
     {
         if (m_totalPower >= m_lightPower)
@@ -119,54 +113,43 @@ public class AIPower : MonoBehaviour
     void UpdatePowerText()
     {
         for (int i = 0; i < powerText.Length; i++)
-        {
             powerText[i].text = string.Format("Current Power: {0} pow", m_totalPower);
-        }
     }
 
     public bool CheckPower(int powerRequest)
     {
-        if(m_totalPower - powerRequest >= 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return (m_totalPower - powerRequest >= 0);
     }
 
     public void ChangePowerValues(string name, int newPower)
     {
-        print("Yeezy yeezy what's good?");
-        if(name == "Lights")
+        switch (name)
         {
-            lightPower += newPower;
+            case "Lights":
+                lightPower += newPower;
+                break;
+            case "Cameras":
+                cameraPower += newPower;
+                break;
+            case "Doors":
+                doorUnlockedPower += newPower;
+                break;
         }
-        if(name == "Cameras")
-        {
-            cameraPower += newPower;
-        }
-        if(name == "Doors")
-        {
-            doorUnlockedPower += newPower;
-        }
-
     }
 
     void OriginalPower(string name)
     {
-        if(name == "Lights")
+        switch (name)
         {
-            lightPower = m_lightPower;
-        }
-        if(name == "Cameras")
-        {
-            cameraPower = m_cameraPower;
-        }
-        if(name == "Doors")
-        {
-            doorUnlockedPower = m_doorUnlockedPower;
+            case "Lights":
+                lightPower = m_lightPower;
+                break;
+            case "Cameras":
+                cameraPower = m_cameraPower;
+                break;
+            case "Doors":
+                doorUnlockedPower = m_doorUnlockedPower;
+                break;
         }
     }
 }
