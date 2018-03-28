@@ -20,8 +20,6 @@ public class LightToggle : MonoBehaviour {
 
     public void Power()
     {
-        print("clockwerk");
         m_lightController.LightSwitch(lightID);
-
     }
 }

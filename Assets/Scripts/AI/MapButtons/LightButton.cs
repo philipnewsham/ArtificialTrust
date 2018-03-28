@@ -12,22 +12,12 @@ public class LightButton : MonoBehaviour
 
     void Start()
     {
-        //m_ai = GameObject.FindGameObjectWithTag("AI");
-       // m_lightController = m_ai.GetComponent<LightController>();
         m_image = gameObject.GetComponent<Image>();
     }
 
     public void Power()
     {
         m_isOn = !m_isOn;
-        //m_lightController.LightSwitch(lightID);
-        if(m_isOn)
-        {
-            m_image.sprite = sprites[0];
-        }
-        else
-        {
-            m_image.sprite = sprites[1];
-        }
+        m_image.sprite = sprites[m_isOn == true ? 0 : 1];
     }
 }

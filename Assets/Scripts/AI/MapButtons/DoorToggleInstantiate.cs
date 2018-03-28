@@ -21,9 +21,7 @@ public class DoorToggleInstantiate : MonoBehaviour
     private bool m_allLocksOn;
 
     public Font textFont;
-
     
-	// Use this for initialization
 	void Start ()
     {
         m_ai = GameObject.FindGameObjectWithTag("AI");
@@ -41,14 +39,12 @@ public class DoorToggleInstantiate : MonoBehaviour
         for (int i = 0; i < m_doorsLength; i++)
         {
             GameObject doorToggleClone = Instantiate(doorToggles, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            //new Text[3] cloneText = doorToggleClone.GetComponentsInChildren<Text>();
             Text[] cloneText = new Text[3];
             cloneText = doorToggleClone.GetComponentsInChildren<Text>();
+
             for (int j = 0; j < 3; j++)
-            {
                 cloneText[j].font = textFont;
-            }
-            //.font = textFont;
+
             doorToggleClone.transform.SetParent(gameObject.transform);
 
             DoorToggle doorToggleScript = doorToggleClone.GetComponent<DoorToggle>();
@@ -71,31 +67,24 @@ public class DoorToggleInstantiate : MonoBehaviour
         for (int i = 0; i < m_doorsLength; i++)
         {
             if (m_doorLockedToggleArray[i].isOn == false)
-            {
                 m_doorLockedToggleArray[i].interactable = false;
-            }
         }
     }
 
     public void LockedOutAction()
     {
         for (int i = 0; i < m_doorsLength; i++)
-        {
             m_lockedOutAction[i] = true;
-        }
     }
 
     public void EnoughPowerLocked()
     {
-        //print("GOTTOMSOTTEM");
         for (int i = 0; i < m_doorsLength; i++)
         {
             if (m_doorLockedToggleArray[i].isOn == false && m_isCounting[i] == false)
             {
-                if (!m_lockedOutAction[i] && m_aiPowerScript.CheckPower(m_doorLockPower)) 
-                {
+                if (!m_lockedOutAction[i] && m_aiPowerScript.CheckPower(m_doorLockPower))
                     m_doorLockedToggleArray[i].interactable = true;
-                }
             }
         }
     }
@@ -105,22 +94,18 @@ public class DoorToggleInstantiate : MonoBehaviour
         for (int i = 0; i < m_doorsLength; i++)
         {
             if (m_doorPoweredToggleArray[i].isOn == false)
-            {
                 m_doorPoweredToggleArray[i].interactable = false;
-            }
         }
     }
 
     public void EnoughPower()
     {
-        //print("wowee boys");
         for (int i = 0; i < m_doorsLength; i++)
         {
             if (m_doorPoweredToggleArray[i].isOn == false)
             {
                 if (!m_lockedOutAction[i])
                 {
-                    //print("Clicked");
                     m_doorPoweredToggleArray[i].interactable = true;
                 }
             }
@@ -147,11 +132,11 @@ public class DoorToggleInstantiate : MonoBehaviour
                 {
                     m_isCounting[i] = false;
                     m_countingDown[i] = m_shutOutTime;
-                    if (m_aiPowerScript.CheckPower(m_doorLockPower) == true)
+
+                    if (m_aiPowerScript.CheckPower(m_doorLockPower))
                     {
                         ReEnableDoorLock(i);
                     }
-                    //print("heyo");
                 }
             }
         }
@@ -160,9 +145,7 @@ public class DoorToggleInstantiate : MonoBehaviour
     public void AllDoorsAreLocked()
     {
         for (int i = 0; i < m_doorsLength; i++)
-        {
             m_doorLockedToggleArray[i].interactable = false;
-        }
     }
 
     void ReEnableDoorLock(int doorID)
@@ -178,9 +161,7 @@ public class DoorToggleInstantiate : MonoBehaviour
             for (int i = 0; i < m_doorsLength; i++)
             {
                 if (m_doorPoweredToggleArray[i].isOn)
-                {
                     m_doorPoweredToggleArray[i].isOn = false;
-                }
             }
         }
         else
@@ -188,9 +169,7 @@ public class DoorToggleInstantiate : MonoBehaviour
             for (int i = 0; i < m_doorsLength; i++)
             {
                 if(!m_doorPoweredToggleArray[i].isOn && m_doorPoweredToggleArray[i].interactable)
-                {
                     m_doorPoweredToggleArray[i].isOn = true;
-                }
             }
         }
     }
@@ -203,9 +182,7 @@ public class DoorToggleInstantiate : MonoBehaviour
             for (int i = 0; i < m_doorsLength; i++)
             {
                 if (m_doorLockedToggleArray[i].isOn)
-                {
                     m_doorLockedToggleArray[i].isOn = false;
-                }
             }
         }
         else
@@ -213,9 +190,7 @@ public class DoorToggleInstantiate : MonoBehaviour
             for (int i = 0; i < m_doorsLength; i++)
             {
                 if (!m_doorLockedToggleArray[i].isOn && m_doorLockedToggleArray[i].interactable)
-                {
                     m_doorLockedToggleArray[i].isOn = true;
-                }
             }
         }
     }

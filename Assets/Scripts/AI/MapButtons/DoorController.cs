@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DoorController : MonoBehaviour {
+public class DoorController : MonoBehaviour
+{
     private AIPower m_aiPowerScript;
     public SpecificDoor[] m_specificDoorScripts;
     private int m_lockedDoorPower;
@@ -12,6 +13,7 @@ public class DoorController : MonoBehaviour {
     public int openingTime;
     private bool[] m_lockedOutAction;
     private int m_doorsLength;
+
     void Start()
     {
         m_aiPowerScript = gameObject.GetComponent<AIPower>();
@@ -37,33 +39,27 @@ public class DoorController : MonoBehaviour {
 
     public void Locking(int doorNo)
     {
-        //print("locking: door controller");
         if (m_locked[doorNo])
         {
             if (m_lockedOutAction[doorNo])
             {
-                m_specificDoorScripts[doorNo].DoorPower("Unlock");
                 m_locked[doorNo] = false;
                 m_lockedOutAction[doorNo] = false;
             }
             else
             {
                 m_aiPowerScript.PowerExchange(m_lockedDoorPower);
-                m_specificDoorScripts[doorNo].DoorPower("Unlock");
                 m_locked[doorNo] = !m_locked[doorNo];
             }
+            m_specificDoorScripts[doorNo].DoorPower("Unlock");
         }
         else
         {
-            if(m_aiPowerScript.CheckPower(m_lockedDoorPower) == true)
+            if(m_aiPowerScript.CheckPower(m_lockedDoorPower))
             {
                 m_aiPowerScript.PowerExchange(-m_lockedDoorPower);
                 m_specificDoorScripts[doorNo].DoorPower("Lock");
                 m_locked[doorNo] = !m_locked[doorNo];
-            }
-            else
-            {
-                //no power
             }
         }
     }
@@ -76,7 +72,6 @@ public class DoorController : MonoBehaviour {
             //if the door is locked (15pow)
             if (m_locked[doorNo])
             {
-                //print("Seargent");
                 m_aiPowerScript.PowerExchange(m_unlockedDoorPower);
             }
             //if the door is unlocked (5pow)
@@ -90,15 +85,11 @@ public class DoorController : MonoBehaviour {
         }
         else
         {
-            if(m_aiPowerScript.CheckPower(m_unlockedDoorPower) == true)
+            if(m_aiPowerScript.CheckPower(m_unlockedDoorPower))
             {
                 m_aiPowerScript.PowerExchange(-m_unlockedDoorPower);
                 m_specificDoorScripts[doorNo].DoorPower("On");
                 m_powered[doorNo] = !m_powered[doorNo];
-            }
-            else
-            {
-                //no power
             }
         }
     }
@@ -112,8 +103,7 @@ public class DoorController : MonoBehaviour {
             m_specificDoorScripts[i].DoorPower("Lock");
         }
     }
-
-
+    
     public void AllPowerOff()
     {
         for (int i = 0; i < m_powered.Length; i++)
