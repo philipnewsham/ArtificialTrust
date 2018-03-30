@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScientistWin : MonoBehaviour {
+public class ScientistWin : MonoBehaviour
+{
     public string[] winConditions;
     private int m_winCondition;
     private bool m_completedTask = false;
@@ -9,8 +10,9 @@ public class ScientistWin : MonoBehaviour {
     public GameObject aiLoseCanvas;
     private bool m_aiFateChosen = false;
     public bool enteredElevator = false;
-	// Use this for initialization
-	void Start () {
+
+	void Start ()
+    {
         m_winCondition = Random.Range(0, winConditions.Length);
         completedTask = m_completedTask;
 	}
@@ -30,12 +32,9 @@ public class ScientistWin : MonoBehaviour {
         {
             if (Input.GetButtonDown("ControllerA"))
             {
-                if (m_completedTask)
-                {
-                    AISaved();
-                    m_aiFateChosen = true;
-                }
+                    m_aiFateChosen = m_completedTask;
             }
+
             if (Input.GetButtonDown("ControllerB"))
             {
                 if (m_completedTask)
@@ -46,19 +45,9 @@ public class ScientistWin : MonoBehaviour {
             }
         }
     }
-
-    void AISaved()
-    {
-        
-    }
-
+    
     void AIDeleted()
     {
         aiLoseCanvas.SetActive(true);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-       
     }
 }

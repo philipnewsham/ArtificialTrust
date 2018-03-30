@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DualScreen : MonoBehaviour {
-
-	// Use this for initialization
+public class DualScreen : MonoBehaviour
+{
 	void Start ()
     {
             Debug.Log("displays connected: " + Display.displays.Length);

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class RobotBody : MonoBehaviour {
+public class RobotBody : MonoBehaviour
+{
     public int powerNeeded;
     private int m_powerNeeded { get { return powerNeeded; } }
     private float m_powerGiven;
@@ -34,9 +35,9 @@ public class RobotBody : MonoBehaviour {
     public GameObject ai;
     private AIPower m_aiPower;
     private DoorController m_doorControllerScript;
-
-	// Use this for initialization
-	void Start () {
+    
+	void Start ()
+    {
         m_passwordGeneratorScript = gameController.GetComponent<PasswordGenerator>();
         m_aiPower = ai.GetComponent<AIPower>();
         m_doorControllerScript = ai.GetComponent<DoorController>();
@@ -57,14 +58,11 @@ public class RobotBody : MonoBehaviour {
             m_currentPower = Mathf.FloorToInt((m_aiPower.totalPower * 0.01f) * percentage);
             print(m_aiPower.totalPower * 0.01f);
             print(m_currentPower);
-            if (m_aiPower.CheckPower(m_currentPower) == true)
+
+            if (m_aiPower.CheckPower(m_currentPower))
             {
                 m_poweringUp = true;
                 m_aiPower.PowerExchange(-m_currentPower);
-            }
-            else
-            {
-                print("Not enough Power");
             }
         }
     }
@@ -90,8 +88,6 @@ public class RobotBody : MonoBehaviour {
                 StopPowering();
                 m_poweredLock = true;
                 CheckLocks();
-                print("Robot Powered Up!");
-                
             }
         }
     }
@@ -108,10 +104,9 @@ public class RobotBody : MonoBehaviour {
         poweredText.text = string.Format("Lock Status (Power): Unlocked = {0}", m_poweredLock);
         passwordText.text = string.Format("Lock Status (Password): Unlocked = {0}", m_passwordLock);
         switchesText.text = string.Format("Lock Status (Switches): Unlocked = {0}", m_switchLock);
+
         if (m_poweredLock && m_passwordLock && m_switchLock)
-        {
             enterRobotButton.interactable = true;
-        }
     }
 
     public void CheckPassword()
@@ -121,10 +116,6 @@ public class RobotBody : MonoBehaviour {
             m_passwordLock = true;
             passwordInputField.interactable = false;
             CheckLocks();
-        }
-        else
-        {
-            passwordInputField.text = "";
         }
     }
 

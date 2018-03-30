@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class SpecificDoor : MonoBehaviour {
+
+public class SpecificDoor : MonoBehaviour
+{
     public GameObject door;
     private GameObject m_door { get { return door; } }
     public bool m_powerOn;
@@ -33,6 +35,7 @@ public class SpecificDoor : MonoBehaviour {
     private bool m_inAction = false;
 
     private bool m_unlockedByScientist;
+
     void Start()
     {
         m_ai = GameObject.FindGameObjectWithTag("AI");
@@ -46,10 +49,10 @@ public class SpecificDoor : MonoBehaviour {
         m_unlockingTime = m_doorControllerScript.unlockingTime;
         m_openingTime = m_doorControllerScript.openingTime;
         m_panelStatus = gameObject.GetComponentsInChildren<Text>();
+
         if (!m_powerOn)
-        {
             OpenDoor();
-        }
+
         CheckMaterial();
     }
 
@@ -65,15 +68,14 @@ public class SpecificDoor : MonoBehaviour {
                 m_audioSource.clip = audioClips[0];
                 m_audioSource.loop = true;
                 m_audioSource.Play();
-                //Invoke("UnlockedSound", m_unlockingTime - m_openingTime);
             }
             else
             {
                 Invoke("OpenDoor", m_openingTime);
                 m_audioSource.clip = audioClips[2];
                 m_audioSource.Play();
-                //UnlockedSound();
             }
+
             m_inAction = true;
         }
     }
@@ -88,45 +90,33 @@ public class SpecificDoor : MonoBehaviour {
 
     void CheckMaterial()
     {
-        if (m_locked)
-        {
-            m_renderer.material = materials[0];
-        }
-        else
-        {
-            m_renderer.material = materials[1];
-        }
+        m_renderer.material = materials[m_locked ? 0 : 1];
     }
 
     public void DoorPower(string toggleDoor)
     {
-        if (toggleDoor == "Lock")
+        switch (toggleDoor)
         {
-            m_locked = true;
-            if (m_powerOn)
-            {
-                m_renderer.material = materials[0];
-            }
-        }
-        if (toggleDoor == "Unlock")
-        {
-            m_locked = false;
-            if (m_powerOn)
-            {
-                m_renderer.material = materials[1];
-            }
-        }
-        if (toggleDoor == "Off")
-        {
-            m_powerOn = false;
-            OpenDoor();
-            m_renderer.material = materials[2];
-        }
-        if (toggleDoor == "On")
-        {
-            m_powerOn = true;
-            CloseDoor();
-            CheckMaterial();
+            case "Lock":
+                m_locked = true;
+                if (m_powerOn)
+                    m_renderer.material = materials[0];
+                break;
+            case "Unlock":
+                m_locked = false;
+                if (m_powerOn)
+                    m_renderer.material = materials[1];
+                break;
+                case "Off":
+                    m_powerOn = false;
+                    OpenDoor();
+                    m_renderer.material = materials[2];
+                break;
+            case "On":
+                m_powerOn = true;
+                CloseDoor();
+                CheckMaterial();
+                break;
         }
     }
 
@@ -134,22 +124,18 @@ public class SpecificDoor : MonoBehaviour {
     {
         m_animator.SetTrigger("Open");
         m_doorAudioSource.Play();
+
         if (m_powerOn)
-        {
             Invoke("CloseDoor", 5f);
-        }
+
         if (m_locked && m_unlockedByScientist)
         {
-            //UnlockedSound();
             m_locked = false;
             m_renderer.material = materials[1];
             doorToggleInstantiateScript.DisabledLock(m_doorID);
             m_unlockedByScientist = false;
         }
-        //else
-        //{
-           // UnlockedSound();
-      //  }
+
         UnlockedSound();
     }
 
@@ -158,24 +144,5 @@ public class SpecificDoor : MonoBehaviour {
         m_animator.SetTrigger("Closed");
         m_doorAudioSource.Play();
         m_inAction = false;
-    }
-
-    void ShowStatus()
-    {
-        if (m_powerOn)
-        {
-            if (m_locked)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-        else
-        {
-
-        }
     }
 }

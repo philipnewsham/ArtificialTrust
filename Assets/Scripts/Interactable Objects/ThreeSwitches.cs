@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class ThreeSwitches : MonoBehaviour {
+
+public class ThreeSwitches : MonoBehaviour
+{
     private bool m_switchOne;
     private bool m_switchTwo;
     private bool m_switchThree;
@@ -44,8 +46,9 @@ public class ThreeSwitches : MonoBehaviour {
 
     public DoorToggleInstantiate doorToggleInstantiateScript;
     public SwitchToggles switchToggleScript;
-    // Use this for initialization
-    void Start () {
+
+    void Start ()
+    {
         m_blackoutScript = blackoutCanvas.GetComponent<Blackout>();
         m_doorControllerScript = ai.GetComponent<DoorController>();
         m_lightControllerScript = ai.GetComponent<LightController>();
@@ -60,9 +63,7 @@ public class ThreeSwitches : MonoBehaviour {
         m_randPower = Random.Range(0, 3);
 
         for (int i = 0; i < m_actionNumber.Length; i++)
-        {
             m_numberList.Add(i);
-        }
 
         for (int i = 0; i < m_actionNumber.Length; i++)
         {
@@ -70,29 +71,23 @@ public class ThreeSwitches : MonoBehaviour {
             m_actionNumber[i] = m_numberList[randomNo];
 
             m_numberList.Remove(m_numberList[randomNo]);
-            if (m_actionNumber[i] != 7)
-            {
-                m_actionMessages[i] = string.Format("Switches on {0} will {1}", m_switchPositions[i], m_actions[m_actionNumber[i]]);
-            }
-            else
-            {
+            
+            m_actionMessages[i] = string.Format("Switches on {0} will {1}", m_switchPositions[i], m_actions[m_actionNumber[i]]);
+
+            if(m_actionNumber[i] == 7)
                 m_actionMessages[i] = string.Format("Switches on {0} will increase {1} by {2} power",m_switchPositions[i], m_poweredObjects[m_randObjects], m_powerIncreased[m_randPower]);
-            }
+
             if(i == 0)
-            {
                 m_currentNumber = m_actionNumber[i];
-                print(m_currentNumber);
-            }
         }
+
         ScientistSwitchInfo();
         AISwitchInfo();
     }
 	void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
             Switches();
-        }
     }
 
     public void SwitchOne()
@@ -119,13 +114,9 @@ public class ThreeSwitches : MonoBehaviour {
     void Switches()
     {
         if (m_switchOne)
-        {
             SwitchOneOn();
-        }
         else
-        {
             SwitchOneOff();
-        }
     }
 
     void SwitchOneOn()
@@ -133,123 +124,81 @@ public class ThreeSwitches : MonoBehaviour {
         if (m_switchTwo)
         {
             if (m_switchThree)
-            {
                 m_currentNumber = m_actionNumber[0];
-                print("1,1,1");
-            }
             else
-            {
                 m_currentNumber = m_actionNumber[1];
-                //m_robotBodyScript.SwitchesSet();
-                print("1,1,0");
-            }
         }
         else
         {
             if (m_switchThree)
-            {
                 m_currentNumber = m_actionNumber[2];
-                print("1,0,1");
-            }
             else
-            {
                 m_currentNumber = m_actionNumber[3];
-                print("1,0,0");
-            }
         }
-        print(m_currentNumber);
-        //Interact();
     }
 
     void SwitchOneOff()
     {
         if (m_switchTwo)
-        {
-            if (m_switchThree)
-            {
-                m_currentNumber = m_actionNumber[4];
-                print("0,1,1");
-            }
-            else
-            {
-                m_currentNumber = m_actionNumber[5];
-                print("0,1,0");
-            }
-        }
+            m_currentNumber = m_actionNumber[m_switchThree ? 4 : 5];
         else
         {
             if (m_switchThree)
-            {
                 m_currentNumber = m_actionNumber[6];
-                print("0,0,1");
-            }
             else
-            {
                 m_currentNumber = m_actionNumber[7];
-                print("0,0,0");
-            }
         }
-        print(m_currentNumber);
-        //Interact();
     }
 
     public void Interact()
     {
         m_buttonAudioSource.Play();
         m_buttonAnimator.SetTrigger("Pressed");
-        if(m_currentNumber == 0)
-        {
-            print("do nothing");
-        }
-        else if(m_currentNumber == 1)
-        {
-            m_timerScript.ChangeTime(5);
-            m_timerScript.countingDown = true;
-        }
-        else if(m_currentNumber == 2)
-        {
-            m_blackoutScript.EnterBlackout(10);
-        }
-        else if (m_currentNumber == 3)
-        {
-            m_robotBodyScript.SwitchesSet();
-        }
-        else if (m_currentNumber == 4)
-        {
-            m_powerSent = 20;
-            PowerExchange();
-            m_powerSent = -20;
-            Invoke("PowerExchange", 10f);
-        }
-        else if (m_currentNumber == 5)
-        {
-            m_powerSent = -20;
-            PowerExchange();
-            m_powerSent = 20;
-            Invoke("PowerExchange", 10f);
-        }
-        else if (m_currentNumber == 6)
-        {
-            doorToggleInstantiateScript.AllDoorsAreLocked();
-            doorToggleInstantiateScript.LockedOutAction();
-            m_doorControllerScript.LockAllDoors();
-        }
-        else if (m_currentNumber == 7)
-        {
-            m_aiPowerScript.ChangePowerValues(m_poweredObjects[m_randObjects], m_powerIncreased[m_randPower]);
-            if(m_poweredObjects[m_randObjects] == "Lights")
-            {
-                m_lightControllerScript.CurrentLightPower(m_powerIncreased[m_randPower]);
-            }
-            else if(m_poweredObjects[m_randObjects] == "Doors")
-            {
-                m_doorControllerScript.CurrentDoorPower(m_powerIncreased[m_randPower]);
-            }
-            else if(m_poweredObjects[m_randObjects] == "Cameras")
-            {
-                m_cameraController.CurrentCameraPower(m_powerIncreased[m_randPower]);
-            }
 
+        switch (m_currentNumber)
+        {
+            case 1:
+                m_timerScript.ChangeTime(5);
+                m_timerScript.countingDown = true;
+                break;
+            case 2:
+                m_blackoutScript.EnterBlackout(10);
+                break;
+            case 3:
+                m_robotBodyScript.SwitchesSet();
+                break;
+            case 4:
+                m_powerSent = 20;
+                PowerExchange();
+                m_powerSent = -20;
+                Invoke("PowerExchange", 10f);
+                break;
+            case 5:
+                m_powerSent = -20;
+                PowerExchange();
+                m_powerSent = 20;
+                Invoke("PowerExchange", 10f);
+                break;
+            case 6:
+                doorToggleInstantiateScript.AllDoorsAreLocked();
+                doorToggleInstantiateScript.LockedOutAction();
+                m_doorControllerScript.LockAllDoors();
+                break;
+            case 7:
+                m_aiPowerScript.ChangePowerValues(m_poweredObjects[m_randObjects], m_powerIncreased[m_randPower]);
+                switch (m_poweredObjects[m_randObjects])
+                {
+                    case "Lights":
+                        m_lightControllerScript.CurrentLightPower(m_powerIncreased[m_randPower]);
+                        break;
+                    case "Doors":
+                        m_doorControllerScript.CurrentDoorPower(m_powerIncreased[m_randPower]);
+                        break;
+                    case "Cameras":
+                        m_cameraController.CurrentCameraPower(m_powerIncreased[m_randPower]);
+                        break;
+                }
+                break;
         }
     }
 
@@ -266,8 +215,6 @@ public class ThreeSwitches : MonoBehaviour {
     void AISwitchInfo()
     {
         for (int i = 5; i < 9; i++)
-        {
             m_hackingDocumentScript.RecieveDocumentMessages(m_actionMessages[i - 1], i);
-        }
     }
 }

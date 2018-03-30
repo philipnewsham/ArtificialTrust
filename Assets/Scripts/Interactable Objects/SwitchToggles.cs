@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
 public class SwitchToggles : MonoBehaviour
 {
     private GameObject m_gameController;
@@ -21,6 +22,5 @@ public class SwitchToggles : MonoBehaviour
     {
         switchToggles[switchNo].isOn = isNowOn;
         m_switchOn[switchNo] = isNowOn;
-       // print("Done");
     }
 }

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DoorControls : MonoBehaviour {
+public class DoorControls : MonoBehaviour
+{
     public GameObject door;
     private GameObject m_door { get { return door; } }
     private bool m_powerOn;
@@ -23,35 +24,25 @@ public class DoorControls : MonoBehaviour {
     public void Interactable()
     {
         if (m_powerOn)
-        {
-            if (m_locked)
-            {
-                Invoke("OpenDoor", m_unlockingTime);
-            }
-            else
-            {
-                Invoke("OpenDoor", m_openingTime);
-            }
-        }
+            Invoke("OpenDoor", m_locked ? m_unlockingTime : m_openingTime);
     }
 
     public void DoorPower(string toggleDoor)
     {
-        if(toggleDoor == "Lock")
+        switch (toggleDoor)
         {
-            m_locked = true;
-        }
-        if(toggleDoor == "Unlock")
-        {
-            m_locked = false;
-        }
-        if(toggleDoor == "Off")
-        {
-            m_powerOn = false;
-        }
-        if(toggleDoor == "On")
-        {
-            m_powerOn = true;
+            case "Lock":
+                m_locked = true;
+                break;
+            case "Unlock":
+                m_locked = false;
+                break;
+            case "Off":
+                m_powerOn = false;
+                break;
+            case "On":
+                m_powerOn = true;
+                break;
         }
     }
 
