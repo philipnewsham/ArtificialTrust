@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class PanicButton : MonoBehaviour {
+public class PanicButton : MonoBehaviour
+{
     private int m_scientistButtonNo;
     private int m_aiButtonNo;
     private bool m_scientistPressed = false;
@@ -39,7 +40,7 @@ public class PanicButton : MonoBehaviour {
     public Text scientistKnowledgeText;
 
     public DoorToggleInstantiate doorToggleInstantiateScript;
-    // Use this for initialization
+
     void Start()
     {
         m_scientistButtonNo = Random.Range(0, 8);
@@ -57,7 +58,6 @@ public class PanicButton : MonoBehaviour {
 
     public void Interact()//scientist panic button
     {
-        print("interacted with panic button - Scientist");
         if (!m_scientistPressed)
         {
             PerformAction(m_scientistButtonNo);
@@ -75,10 +75,8 @@ public class PanicButton : MonoBehaviour {
         aiButtonPressedGO.SetActive(false);
         m_scientistButtonPressedText.text = string.Format("Pressing this button meant that you will {0}", m_actions[m_scientistButtonNo]);
         scientistButtonPressedGO.SetActive(false);
-
     }
-
-
+    
     void SwitchOffScientistText()
     {
         scientistButtonPressedGO.SetActive(false);
@@ -91,7 +89,6 @@ public class PanicButton : MonoBehaviour {
 
     public void AIPanicButton()
     {
-        print("Interacted with panic button - AI");
         if (!m_aiPressed)
         {
             PerformAction(m_aiButtonNo);
@@ -103,48 +100,40 @@ public class PanicButton : MonoBehaviour {
 
     void PerformAction(int actionNo)
     {
-        if (actionNo == 0)
+        switch (actionNo)
         {
-            print("do nothing");
-        }
-        else if (actionNo == 1)
-        {
-            m_timerScript.ChangeTime(5);
-            m_timerScript.countingDown = true;
-        }
-        else if (actionNo == 2)
-        {
-            m_blackoutScript.EnterBlackout(10);
-        }
-        else if (actionNo == 3)
-        {
-            m_robotBodyScript.SwitchesSet();
-        }
-        else if (actionNo == 4)
-        {
-            m_powerSent = 20;
-            PowerExchange();
-            m_powerSent = -20;
-            Invoke("PowerExchange", 10f);
-        }
-        else if (actionNo == 5)
-        {
-            m_powerSent = -20;
-            PowerExchange();
-            m_powerSent = 20;
-            Invoke("PowerExchange", 10f);
-        }
-        else if (actionNo == 6)
-        {
-            doorToggleInstantiateScript.AllDoorsAreLocked();
-            doorToggleInstantiateScript.LockedOutAction();
-            m_doorControllerScript.LockAllDoors();
-        }
-        else if (actionNo == 7)
-        {
-            int randObj = Random.Range(0, m_poweredObjects.Length);
-            int randPow = Random.Range(0, m_powerIncreased.Length);
-            m_aiPowerScript.ChangePowerValues(m_poweredObjects[randObj], m_powerIncreased[randPow]);
+            case 1:
+                m_timerScript.ChangeTime(5);
+                m_timerScript.countingDown = true;
+                break;
+            case 2:
+                m_blackoutScript.EnterBlackout(10);
+                break;
+            case 3:
+                m_robotBodyScript.SwitchesSet();
+                break;
+            case 4:
+                m_powerSent = 20;
+                PowerExchange();
+                m_powerSent = -20;
+                Invoke("PowerExchange", 10f);
+                break;
+            case 5:
+                m_powerSent = -20;
+                PowerExchange();
+                m_powerSent = 20;
+                Invoke("PowerExchange", 10f);
+                break;
+            case 6:
+                doorToggleInstantiateScript.AllDoorsAreLocked();
+                doorToggleInstantiateScript.LockedOutAction();
+                m_doorControllerScript.LockAllDoors();
+                break;
+            case 7:
+                int randObj = Random.Range(0, m_poweredObjects.Length);
+                int randPow = Random.Range(0, m_powerIncreased.Length);
+                m_aiPowerScript.ChangePowerValues(m_poweredObjects[randObj], m_powerIncreased[randPow]);
+                break;
         }
     }
 

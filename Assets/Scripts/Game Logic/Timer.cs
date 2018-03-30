@@ -11,21 +11,15 @@ public class Timer : MonoBehaviour
 
     public GameObject scientistLosesCanvas;
     public GameObject aiLosesCanvas;
-	// Use this for initialization
-	void Start ()
-    {
-        //m_currentTime = m_possibleTimes[(Random.Range(0, m_possibleTimes.Length))];
-        //print(m_currentTime);
-	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (countingDown)
         {
             m_currentTime -= m_timerSpeed * Time.deltaTime;
+
             if (m_currentTime <= 0)
             {
-                print("gameover");
                 countingDown = false;
                 ShutDown();
             }

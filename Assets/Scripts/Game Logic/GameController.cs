@@ -30,69 +30,57 @@ public class GameController : MonoBehaviour
     //0 - safe/1,2,3 - Filing Cabinets/4,5,6 - Switches/7 - SwitchesButton/8 - Switches info/9 - PanicButton(Scientist)/10...19 - Doors/20...29 - Lights/30...39 - Cameras/40 - Scientist Computer
     public void InteractedWith(int objectID)
     {
-        if(objectID == 0)
+        switch (objectID)
         {
-            safeScript.Interact();
-        }
-        if(objectID == 1)
-        {
-            filingCabinetScripts[0].Interact();
-        }
-        if(objectID == 2)
-        {
-            filingCabinetScripts[1].Interact();
-        }
-        if (objectID == 3)
-        {
-            filingCabinetScripts[2].Interact();
-        }
-        if (objectID == 4)
-        {
-            switchScripts[0].Interact();
-        }
-        if (objectID == 5)
-        {
-            switchScripts[1].Interact();
-        }
-        if (objectID == 6)
-        {
-            switchScripts[2].Interact();
-        }
-        if(objectID == 7)
-        {
-            threeSwitches.Interact();
-        }
-        if(objectID == 8)
-        {
-            switchInfoScientist.Interact();
-        }
-        if(objectID == 9)
-        {
-            if (!m_panicButtonPressed)
-            {
-                gameObject.GetComponent<PanicButton>().Interact();
-                m_panicButtonRenderer.material = switchedOffBlackMat;
-                panicButton.tag = "Untagged";
-                m_panicButtonAS.Play();
-                m_panicButtonPressed = true;
-            }
-        }
-        if(objectID >= 10 && objectID <= 19)
-        {
-            specificDoors[objectID - 10].Interact();
-        }
-        if(objectID >= 20 && objectID <= 29)
-        {
-            lightToggleInstantiateScript.LightToggled(objectID - 20);
-            lightSwitchesAS[objectID - 20].Play();
-        }
-        if (objectID >= 30 && objectID <= 39)
-        {
-            disableCameras[objectID - 30].Interact();
-        }
-        if(objectID == 40)
-        {
-            scientistComputerScript.Interact();
+            case 0:
+                safeScript.Interact();
+                break;
+            case 1:
+                filingCabinetScripts[0].Interact();
+                break;
+            case 2:
+                filingCabinetScripts[1].Interact();
+                break;
+            case 3:
+                filingCabinetScripts[2].Interact();
+                break;
+            case 4:
+                switchScripts[0].Interact();
+                break;
+            case 5:
+                switchScripts[1].Interact();
+                break;
+            case 6:
+                switchScripts[2].Interact();
+                break;
+            case 7:
+                threeSwitches.Interact();
+                break;
+            case 8:
+                switchInfoScientist.Interact();
+                break;
+            case 9:
+                if (!m_panicButtonPressed)
+                {
+                    gameObject.GetComponent<PanicButton>().Interact();
+                    m_panicButtonRenderer.material = switchedOffBlackMat;
+                    panicButton.tag = "Untagged";
+                    m_panicButtonAS.Play();
+                    m_panicButtonPressed = true;
+                }
+                break;
+            case 40:
+                scientistComputerScript.Interact();
+                break;
+            default:
+                if (objectID >= 10 && objectID <= 19)
+                    specificDoors[objectID - 10].Interact();
+                if (objectID >= 20 && objectID <= 29)
+                    lightToggleInstantiateScript.LightToggled(objectID - 20);
+                    lightSwitchesAS[objectID - 20].Play();
+                if (objectID >= 30 && objectID <= 39)
+                    disableCameras[objectID - 30].Interact();
+                break;
         }
     }
 
