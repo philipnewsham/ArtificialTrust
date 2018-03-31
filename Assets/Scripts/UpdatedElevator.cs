@@ -91,7 +91,6 @@ public class UpdatedElevator : MonoBehaviour
                 aiWins.SetActive(true);
                 if(agentWinScript.mainObjective == 0 && !agentEscaped)
                 {
-                    //timerScript.ChangeMultiplier(1.5f);
 					agentEnd.SetActive(true);
 					agentLoses.SetActive(true);
 					aiEnd.SetActive(true);

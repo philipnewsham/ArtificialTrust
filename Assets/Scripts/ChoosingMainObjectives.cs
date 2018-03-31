@@ -90,7 +90,7 @@ public class ChoosingMainObjectives : MonoBehaviour
     };
 
     public Text[] objectiveTextboxes;
-	// Use this for initialization
+
 	void Awake ()
     {
         m_aiObjective = Random.Range(0, 2);
@@ -104,31 +104,27 @@ public class ChoosingMainObjectives : MonoBehaviour
         if (m_agentObjective == 0)
         {
 			m_agentObjectivesFinal[0] = string.Format(m_agentObjectiveString[0]);
+
             for (int i = 0; i < m_workingWithAISafe.Length; i++)
-            {
                 m_agentObjectivesFinal[0] += string.Format("\n{0}", m_workingWithAISafe[i]);
-            }
 
             m_agentObjectivesFinal[1] += m_agentObjectiveString[0];
+
             for (int i = 0; i < m_workingAgainstAISafe.Length; i++)
-            {
                 m_agentObjectivesFinal[1] += string.Format("\n{0}", m_workingAgainstAISafe[i]);
-            }
         }
 
         if (m_agentObjective == 1)
         {
             m_agentObjectivesFinal[0] += m_agentObjectiveString[1];
+
             for (int i = 0; i < m_workingWithAIDelete.Length; i++)
-            {
                 m_agentObjectivesFinal[0] += string.Format("\n{0}", m_workingWithAIDelete[i]);
-            }
 
             m_agentObjectivesFinal[1] += m_agentObjectiveString[1];
+
             for (int i = 0; i < m_workingAgainstAIDelete.Length; i++)
-            {
                 m_agentObjectivesFinal[1] += string.Format("\n{0}", m_workingAgainstAIDelete[i]);
-            }
         }
         objectiveTextboxes[1].text = m_agentObjectivesFinal[0];
     }
@@ -138,29 +134,29 @@ public class ChoosingMainObjectives : MonoBehaviour
         if (m_aiObjective == 0)
         {
 			m_aiObjectivesFinal[0] += string.Format("<color=yellow>{0}</color>",m_aiObjectiveString[0]);
+
             for (int i = 0; i < m_workingWithAgentRobotBody.Length; i++)
-            {
                 m_aiObjectivesFinal[0] += string.Format("\n\n{0}", m_workingWithAgentRobotBody[i]);
-            }
+
 			m_aiObjectivesFinal[1] += string.Format("<color=yellow>{0}</color>",m_aiObjectiveString[0]);
+
             for (int i = 0; i < m_workingAgainstAgentRobotBody.Length; i++)
-            {
                 m_aiObjectivesFinal[1] += string.Format("\n\n{0}", m_workingAgainstAgentRobotBody[i]);
-            }
         }
+
         if (m_aiObjective == 1)
         {
 			m_aiObjectivesFinal[0] += string.Format("<color=yellow>{0}</color>",m_aiObjectiveString[1]);
+
             for (int i = 0; i < m_workingWithAgentRobotBody.Length; i++)
-            {
                 m_aiObjectivesFinal[0] += string.Format("\n\n{0}", m_workingAgainstAgentStall[i]);
-            }
+
 			m_aiObjectivesFinal[1] += string.Format("<color=yellow>{0}</color>",m_aiObjectiveString[1]);
+
             for (int i = 0; i < m_workingAgainstAgentRobotBody.Length; i++)
-            {
                 m_aiObjectivesFinal[1] += string.Format("\n\n{0}", m_workingAgainstAgentStall[i]);
-            }
         }
+
         objectiveTextboxes[0].text = m_aiObjectivesFinal[0];
     }
 
@@ -172,6 +168,7 @@ public class ChoosingMainObjectives : MonoBehaviour
     }
 
     int m_curAgentTextInt;
+
     public void AgentSwitchText()
     {
         m_curAgentTextInt += 1;
@@ -181,12 +178,8 @@ public class ChoosingMainObjectives : MonoBehaviour
     public int ReturnObjective(bool isAgent)
     {
         if(isAgent)
-        {
             return m_agentObjective;
-        }
         else
-        {
             return m_aiObjective;
-        }
     }
 }

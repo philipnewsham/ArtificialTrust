@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
-public class PasswordGenerator : MonoBehaviour {
+public class PasswordGenerator : MonoBehaviour
+{
     private string[] m_letters = new string[10] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
     private string m_currentPassword;
     //private string[] m_passwordArray;
