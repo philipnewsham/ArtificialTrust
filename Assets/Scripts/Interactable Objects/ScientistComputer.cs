@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class ScientistComputer : MonoBehaviour
-{
+public class ScientistComputer : MonoBehaviour {
     private ReceivePasswords m_receivePasswordScript;
     private string m_password;
     private string[] m_letters = new string[10] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
@@ -49,7 +48,7 @@ public class ScientistComputer : MonoBehaviour
     public AudioClip[] audioClips;
 
     public GameObject[] letterSelectIcon;
-
+    // Use this for initialization
     void Start ()
     {
         m_audioSource = gameObject.GetComponent<AudioSource>();
@@ -62,7 +61,8 @@ public class ScientistComputer : MonoBehaviour
         m_lengthNumber = m_letters.Length;
         Invoke("RecievePassword", 1f);
 	}
-    
+
+
     public void ReceiveSequence(string message)
     {
         sequenceInformation.GetComponentInChildren<Text>().text = message;
@@ -83,7 +83,9 @@ public class ScientistComputer : MonoBehaviour
         if (m_isActive)
         {
             if (Input.GetButtonDown("ControllerBack"))
+            {
                 LeaveCanvas();
+            }
         }
 
         if (m_isActive && !m_lockedOut)
@@ -92,21 +94,25 @@ public class ScientistComputer : MonoBehaviour
             {
                 if (Input.GetAxisRaw("DpadY") > 0)
                 {
+                    print("up");
                     m_dPadPressed = true;
                     DPadUp();
                 }
                 if (Input.GetAxisRaw("DpadY") < 0)
                 {
+                    print("down");
                     m_dPadPressed = true;
                     DPadDown();
                 }
                 if (Input.GetAxisRaw("DpadX") > 0)
                 {
+                    print("right");
                     m_dPadPressed = true;
                     DPadRight();
                 }
                 if (Input.GetAxisRaw("DpadX") < 0)
                 {
+                    print("left");
                     m_dPadPressed = true;
                     DPadLeft();
                 }
@@ -115,25 +121,34 @@ public class ScientistComputer : MonoBehaviour
             if (Input.GetButtonDown("ControllerA"))
             {
                 if (m_justPressed)
+                {
                     GetButtonA();
+                }
                 else
+                {
                     m_justPressed = true;
+                }
             }
 
             if (Input.GetButtonDown("ControllerX"))
+            {
                 GetButtonX();
+            }
 
             if (Input.GetButtonDown("ControllerB"))
+            {
                 GetButtonB();
+            }
 
             if ((Input.GetAxisRaw("DpadY") == 0) && (Input.GetAxisRaw("DpadX") == 0) && (m_dPadPressed))
+            {
                 m_dPadPressed = false;
+            }
         }
 
         if (m_downloadingSequenceData)
         {
             m_sequenceTime -= 1 * Time.deltaTime;
-
             if (m_sequenceTime <= 0f)
             {
                 m_downloadingSequenceData = false;
@@ -148,23 +163,34 @@ public class ScientistComputer : MonoBehaviour
                 int percentageCompleted = Mathf.FloorToInt(100 - (m_sequenceTime / m_downloadingTime * 100));
                 int minutesRemaining = Mathf.FloorToInt(m_sequenceTime / 60);
                 int secondsRemaining = Mathf.FloorToInt(m_sequenceTime % 60);
-
                 string currentMinute;
                 string currentSecond;
-
-                currentMinute = m_minuteText[minutesRemaining == 1 ? 1 : 0];
-                currentSecond = m_secondText[secondsRemaining == 1 ? 1 : 0];
-
+                if (minutesRemaining == 1)
+                {
+                    currentMinute = m_minuteText[1];
+                }
+                else
+                {
+                    currentMinute = m_minuteText[0];
+                }
+                if (secondsRemaining == 1)
+                {
+                    currentSecond = m_secondText[1];
+                }
+                else
+                {
+                    currentSecond = m_secondText[0];
+                }
                 string downloadingDataMessage = string.Format("Current Document: {0} \nPercentage Completed: {1}% \nTime Remaining: {2} {3} and {4} {5}.", m_currentDocumentName[0], percentageCompleted, minutesRemaining, currentMinute, secondsRemaining, currentSecond);
                 downloadingDataText.text = downloadingDataMessage;
                 downloadingDataSlider.value = percentageCompleted / 100f;
+                //print(percentageCompleted / 100);
             }
         }
 
         if (m_downloadingStarsignData)
         {
             m_starsignTime -= 1 * Time.deltaTime;
-
             if (m_starsignTime <= 0f)
             {
                 m_downloadingSequenceData = false;
@@ -181,13 +207,26 @@ public class ScientistComputer : MonoBehaviour
                 int secondsRemaining = Mathf.FloorToInt(m_starsignTime % 60);
                 string currentMinute;
                 string currentSecond;
-
-                currentMinute = m_minuteText[minutesRemaining == 1 ? 1 : 0];
-                currentSecond = m_secondText[secondsRemaining == 1 ? 1 : 0];
-
+                if (minutesRemaining == 1)
+                {
+                    currentMinute = m_minuteText[1];
+                }
+                else
+                {
+                    currentMinute = m_minuteText[0];
+                }
+                if (secondsRemaining == 1)
+                {
+                    currentSecond = m_secondText[1];
+                }
+                else
+                {
+                    currentSecond = m_secondText[0];
+                }
                 string downloadingDataMessage = string.Format("Current Document: {0} \nPercentage Completed: {1}% \nTime Remaining: {2} {3} and {4} {5}.", m_currentDocumentName[1], percentageCompleted, minutesRemaining, currentMinute, secondsRemaining, currentSecond);
                 downloadingDataText.text = downloadingDataMessage;
                 downloadingDataSlider.value = percentageCompleted / 100f;
+                //print(percentageCompleted / 100);
             }
         }
     }
@@ -219,35 +258,66 @@ public class ScientistComputer : MonoBehaviour
 
     void DPadUp()
     {
-        int thisLetter = m_individualLetters[m_currentLetterNo];
-        m_individualLetters[m_currentLetterNo] = (thisLetter < m_lengthNumber - 1) ? (thisLetter + 1) : 0;
+        if (m_individualLetters[m_currentLetterNo] < m_lengthNumber - 1)
+        {
+            m_individualLetters[m_currentLetterNo] += 1;
+        }
+        else
+        {
+            m_individualLetters[m_currentLetterNo] = 0;
+        }
         UpdateLetters();
     }
-
     void DPadDown()
     {
-        int thisLetter = m_individualLetters[m_currentLetterNo];
-        m_individualLetters[m_currentLetterNo] = (thisLetter > 0) ? (thisLetter - 1) : m_lengthNumber - 1;
+        if (m_individualLetters[m_currentLetterNo] > 0)
+        {
+            m_individualLetters[m_currentLetterNo] -= 1;
+        }
+        else
+        {
+            m_individualLetters[m_currentLetterNo] = m_lengthNumber - 1;
+        }
         UpdateLetters();
     }
-
     void DPadLeft()
     {
-        m_currentLetterNo = m_currentLetterNo > 0 ? m_currentLetterNo - 1 : 2;
+        if (m_currentLetterNo > 0)
+        {
+            m_currentLetterNo -= 1;
+        }
+        else
+        {
+            m_currentLetterNo = 2;
+        }
         IconMoveOverLetter();
     }
-
     void DPadRight()
     {
-        m_currentLetterNo = m_currentLetterNo < 2 ? m_currentLetterNo + 1 : 0;
+        if (m_currentLetterNo < 2)
+        {
+            m_currentLetterNo += 1;
+        }
+        else
+        {
+            m_currentLetterNo = 0;
+        }
         IconMoveOverLetter();
     }
 
     void IconMoveOverLetter()
     {
         for (int i = 0; i < 3; i++)
-            letterSelectIcon[i].SetActive(i == m_currentLetterNo);
-
+        {
+            if (i != m_currentLetterNo)
+            {
+                letterSelectIcon[i].SetActive(false);
+            }
+            else
+            {
+                letterSelectIcon[i].SetActive(true);
+            }
+        }
         m_audioSource.clip = audioClips[0];
         m_audioSource.Play();
     }
@@ -258,20 +328,27 @@ public class ScientistComputer : MonoBehaviour
         {
             starsignInformation.SetActive(false);
             m_downloadingStarsignData = false;
-
             if (!m_downloadsCompleted[0])
+            {
                 m_downloadingSequenceData = !m_downloadingSequenceData;
+            }
             else
+            {
                 sequenceInformation.SetActive(true);
+            }
         }
         else
         {
             sequenceInformation.SetActive(false);
             m_downloadingSequenceData = false;
             if (!m_downloadsCompleted[1])
+            {
                 m_downloadingStarsignData = !m_downloadingStarsignData;
+            }
             else
+            {
                 starsignInformation.SetActive(true);
+            }
         }
     }
 
@@ -292,11 +369,14 @@ public class ScientistComputer : MonoBehaviour
             m_isActive = true;
             computerCanvas.SetActive(true);
             m_freezeControlScript.FirstPersonControllerEnabled(false);
-
             if (!m_correctPassword)
+            {
                 passwordPanel.SetActive(true);
+            }
             else
+            {
                 informationPanel.SetActive(true);
+            }
         }
     }
 
@@ -308,19 +388,23 @@ public class ScientistComputer : MonoBehaviour
         passwordPanel.SetActive(false);
         informationPanel.SetActive(false);
     }
-
+    public AgentObjectives agentObjectives;
     void CheckPassword()
     {
         string currentPassword = string.Format("{0}{1}{2}", m_firstLetter, m_secondLetter, m_thirdLetter);
         if(currentPassword == m_password)
         {
+            print("Password Accepted");
             m_correctPassword = true;
+            agentObjectives.UnlockComputer(0, true);
             SwapToInformationPanel();
             m_audioSource.clip = audioClips[1];
         }
         else
+        {
+            print("Incorrect Password");
             m_audioSource.clip = audioClips[2];
-
+        }
         m_audioSource.Play();
     }
 

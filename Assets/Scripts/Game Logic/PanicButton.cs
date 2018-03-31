@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class PanicButton : MonoBehaviour
-{
+public class PanicButton : MonoBehaviour {
     private int m_scientistButtonNo;
     private int m_aiButtonNo;
     private bool m_scientistPressed = false;
@@ -40,7 +39,7 @@ public class PanicButton : MonoBehaviour
     public Text scientistKnowledgeText;
 
     public DoorToggleInstantiate doorToggleInstantiateScript;
-
+    // Use this for initialization
     void Start()
     {
         m_scientistButtonNo = Random.Range(0, 8);
@@ -58,6 +57,7 @@ public class PanicButton : MonoBehaviour
 
     public void Interact()//scientist panic button
     {
+        print("interacted with panic button - Scientist");
         if (!m_scientistPressed)
         {
             PerformAction(m_scientistButtonNo);
@@ -66,17 +66,20 @@ public class PanicButton : MonoBehaviour
             m_scientistPressed = true;
         }
     }
+    private string m_aiMessage;
     //writing up what the buttons will do
     void TextWriteUp()
     {
-        scientistKnowledgeText.text = string.Format("The AI's panic button will {0}", m_actions[m_aiButtonNo]);
+        //scientistKnowledgeText.text = string.Format("The AI's panic button will {0}", m_actions[m_aiButtonNo]);
         aiKnowledgeText.text = string.Format("The Scientist's panic button will {0}", m_actions[m_scientistButtonNo]);
         m_aiButtonPressedText.text = string.Format("Pressing this button meant that you will {0}", m_actions[m_aiButtonNo]);
+        m_aiMessage = string.Format("Pressing this button meant that you will {0}", m_actions[m_aiButtonNo]);
         aiButtonPressedGO.SetActive(false);
         m_scientistButtonPressedText.text = string.Format("Pressing this button meant that you will {0}", m_actions[m_scientistButtonNo]);
         scientistButtonPressedGO.SetActive(false);
     }
-    
+
+
     void SwitchOffScientistText()
     {
         scientistButtonPressedGO.SetActive(false);
@@ -87,56 +90,74 @@ public class PanicButton : MonoBehaviour
         aiButtonPressedGO.SetActive(false);
     }
 
+    public ScrollingText scrollingTextScript;
     public void AIPanicButton()
     {
+        print("Interacted with panic button - AI");
         if (!m_aiPressed)
         {
             PerformAction(m_aiButtonNo);
-            aiButtonPressedGO.SetActive(true);
-            Invoke("SwitchOffAIText", 6f);
+            //aiButtonPressedGO.SetActive(true);
+            //Invoke("SwitchOffAIText", 6f);
             m_aiPressed = true;
+            scrollingTextScript.ParseText(m_aiMessage);
         }
     }
-
+    public GameObject lockOutPanel;
     void PerformAction(int actionNo)
     {
-        switch (actionNo)
+        if (actionNo == 0)
         {
-            case 1:
-                m_timerScript.ChangeTime(5);
-                m_timerScript.countingDown = true;
-                break;
-            case 2:
-                m_blackoutScript.EnterBlackout(10);
-                break;
-            case 3:
-                m_robotBodyScript.SwitchesSet();
-                break;
-            case 4:
-                m_powerSent = 20;
-                PowerExchange();
-                m_powerSent = -20;
-                Invoke("PowerExchange", 10f);
-                break;
-            case 5:
-                m_powerSent = -20;
-                PowerExchange();
-                m_powerSent = 20;
-                Invoke("PowerExchange", 10f);
-                break;
-            case 6:
-                doorToggleInstantiateScript.AllDoorsAreLocked();
-                doorToggleInstantiateScript.LockedOutAction();
-                m_doorControllerScript.LockAllDoors();
-                break;
-            case 7:
-                int randObj = Random.Range(0, m_poweredObjects.Length);
-                int randPow = Random.Range(0, m_powerIncreased.Length);
-                m_aiPowerScript.ChangePowerValues(m_poweredObjects[randObj], m_powerIncreased[randPow]);
-                break;
+            print("do nothing");
+        }
+        else if (actionNo == 1)
+        {
+            // m_timerScript.ChangeTime(5);
+            // m_timerScript.countingDown = true;
+            print("Change this");
+        }
+        else if (actionNo == 2)
+        {
+            //m_blackoutScript.EnterBlackout(10);
+            lockOutPanel.SetActive(true);
+            Invoke("StopLockOut", 10f);
+        }
+        else if (actionNo == 3)
+        {
+            m_robotBodyScript.SwitchesSet();
+        }
+        else if (actionNo == 4)
+        {
+            m_powerSent = 20;
+            PowerExchange();
+            m_powerSent = -20;
+            Invoke("PowerExchange", 10f);
+        }
+        else if (actionNo == 5)
+        {
+            m_powerSent = -20;
+            PowerExchange();
+            m_powerSent = 20;
+            Invoke("PowerExchange", 10f);
+        }
+        else if (actionNo == 6)
+        {
+            doorToggleInstantiateScript.AllDoorsAreLocked();
+            doorToggleInstantiateScript.LockedOutAction();
+            m_doorControllerScript.LockAllDoors();
+        }
+        else if (actionNo == 7)
+        {
+            int randObj = Random.Range(0, m_poweredObjects.Length);
+            int randPow = Random.Range(0, m_powerIncreased.Length);
+            m_aiPowerScript.ChangePowerValues(m_poweredObjects[randObj], m_powerIncreased[randPow]);
         }
     }
 
+    void StopLockOut()
+    {
+        lockOutPanel.SetActive(false);
+    }
     void PowerExchange()
     {
         m_aiPowerScript.PowerExchange(m_powerSent);

@@ -2,19 +2,20 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
-public class MainMenu : MonoBehaviour
-{
+public class MainMenu : MonoBehaviour {
     private bool m_scientistReady = false;
     private bool m_aiReady = false;
 
     public Text scientistReadyText;
     public Text aiReadyText;
 	
+	// Update is called once per frame
 	void Update ()
     {
         if (Input.GetButtonDown("ControllerA"))
+        {
             ScientistReady();
+        }
 	}
 
     void ScientistReady()
@@ -26,7 +27,9 @@ public class MainMenu : MonoBehaviour
             CheckReadyUp();
         }
         else
+        {
             scientistReadyText.text = "Not Ready!";
+        }
     }
 
     public void AIReady()
@@ -38,12 +41,16 @@ public class MainMenu : MonoBehaviour
             CheckReadyUp();
         }
         else
+        {
             aiReadyText.text = "Not Ready!";
+        }
     }
 
     void CheckReadyUp()
     {
         if(m_aiReady && m_scientistReady)
+        {
             SceneManager.LoadScene(1);
+        }
     }
 }

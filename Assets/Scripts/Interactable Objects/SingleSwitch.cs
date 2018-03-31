@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SingleSwitch : MonoBehaviour
-{
+public class SingleSwitch : MonoBehaviour {
     public int switchID;
     private int m_switchID { get { return switchID; } }
     public ThreeSwitches threeSwitches;
@@ -10,44 +9,60 @@ public class SingleSwitch : MonoBehaviour
     public GameObject switchPivot;
     private Animator m_anim;
     private AudioSource m_audioSource;
-    private KeyCode[] keyCodes = new KeyCode[3] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3 };
-
     void Start()
     {
         m_anim = switchPivot.GetComponent<Animator>();
         m_audioSource = gameObject.GetComponent<AudioSource>();
     }
-
 	void Update()
     {
-        for (int i = 0; i < 3; i++)
+        if (m_switchID == 1)
         {
-            if(m_switchID == i + 1)
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                if (Input.GetKeyDown(keyCodes[i]))
-                    Interact();
+                Interact();
             }
         }
-    }
+        if (m_switchID == 2)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Interact();
+            }
+        }
+        if (m_switchID == 3)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                Interact();
+            }
+        }
 
+    }
     public void Interact()
     {
         m_switchedOn = !m_switchedOn;
-
-        switch (m_switchID)
+        if(m_switchID == 1)
         {
-            case 1:
-                threeSwitches.SwitchOne();
-                break;
-            case 2:
-                threeSwitches.SwitchTwo();
-                break;
-            case 3:
-                threeSwitches.SwitchThree();
-                break;
+            threeSwitches.SwitchOne();
         }
-
-        m_anim.SetTrigger(m_switchedOn ? "On" : "Off");
+        else if(m_switchID == 2)
+        {
+            threeSwitches.SwitchTwo();
+        }
+        else if(m_switchID == 3)
+        {
+            threeSwitches.SwitchThree();
+        }
+        if (m_switchedOn)
+        {
+            //transform.eulerAngles = new Vector3(0, 0, 90f);
+            m_anim.SetTrigger("Flip");
+        }
+        else
+        {
+            m_anim.SetTrigger("Flip");
+        }
         m_audioSource.Play();
     }
 }

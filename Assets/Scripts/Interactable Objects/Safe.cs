@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
-
 public class Safe : MonoBehaviour
 {
     private string m_safePassword;
@@ -46,7 +45,7 @@ public class Safe : MonoBehaviour
     public GameObject scientist;
     private FirstPersonController m_firstPersonControllerScript;
     private FreezeControls m_freezeControls;
-    private ScientistWin m_scientistWinScript;
+    private AgentWin m_agentWinScript;
 
     public GameObject ai;
     private HackingDocuments m_hackingDocumentScript;
@@ -62,12 +61,12 @@ public class Safe : MonoBehaviour
     private string[] shapeNames = new string[4] { "Square", "Pentagon", "Circle", "Triangle" };
     public ScientistComputer scientistComputerScript;
     
-    void Start ()
-    {
-        m_safeLockScript = safeLock.GetComponent<SafeLocks>();
+    // Use this for initialization
+    void Start () {
+        m_safeLockScript =  GetComponent<SafeLocks>();
         m_firstPersonControllerScript = scientist.GetComponent<FirstPersonController>();
         m_freezeControls = gameController.GetComponent<FreezeControls>();
-        m_scientistWinScript = scientist.GetComponent<ScientistWin>();
+        m_agentWinScript = scientist.GetComponent<AgentWin>();
         m_hackingDocumentScript = ai.GetComponent<HackingDocuments>();
         m_receivePasswordScript = gameObject.GetComponent<ReceivePasswords>();
 
@@ -78,6 +77,7 @@ public class Safe : MonoBehaviour
         RandomiseButtonOrder();
         m_correctStarSign = Random.Range(0, 12);
         
+        //print("correct star sign is: " + m_correctStarSign);
         CheckLocks();
     }
 
@@ -88,7 +88,6 @@ public class Safe : MonoBehaviour
         {
             m_countingDown -= 1 * Time.deltaTime;
             lockedOutText.text = string.Format("PLEASE WAIT {0} SECONDS BEFORE TRYING AGAIN", Mathf.FloorToInt(m_countingDown));
-
             if(m_countingDown <= 0f)
             {
                 lockedOutPanel.SetActive(false);
@@ -103,19 +102,26 @@ public class Safe : MonoBehaviour
         if (!m_isOpen)
         {
             m_isSearching = !m_isSearching;
+            //Cursor.lockState = CursorLockMode.Confined;
             m_freezeControls.FirstPersonControllerEnabled(!m_isSearching);
             safeCanvasGO.SetActive(m_isSearching);
         }
         else
         {
             if (!m_isEmpty)
+            {
                 EmptySafe();
+            }
+            else
+            {
+                //do nothing?
+            }
         }
     }
 
-    void EmptySafe()
+    public void EmptySafe()
     {
-        m_scientistWinScript.CheckWinCondition(0);
+		m_agentWinScript.UpdateWin (0);
     }
 
     public void LeaveCanvas()
@@ -127,13 +133,27 @@ public class Safe : MonoBehaviour
 	
     public void ChangeStarSignUp()
     {
-        m_currentStarSignNo = (m_currentStarSignNo + 1) % starSigns.Length;
+        if(m_currentStarSignNo == starSigns.Length - 1)
+        {
+            m_currentStarSignNo = 0;
+        }
+        else
+        {
+            m_currentStarSignNo += 1;
+        }
         starSignImage.sprite = starSigns[m_currentStarSignNo];
     }
 
     public void ChangeStarSignDown()
     {
-        m_currentStarSignNo = (m_currentStarSignNo == 0) ? (starSigns.Length - 1) : (m_currentStarSignNo - 1);
+        if (m_currentStarSignNo == 0)
+        {
+            m_currentStarSignNo = starSigns.Length - 1;
+        }
+        else
+        {
+            m_currentStarSignNo -= 1;
+        }
         starSignImage.sprite = starSigns[m_currentStarSignNo];
     }
 
@@ -143,17 +163,20 @@ public class Safe : MonoBehaviour
         {
             m_starsignLock = true;
             for (int i = 0; i < starSignButtons.Length; i++)
+            {
                 starSignButtons[i].interactable = false;
-
+            }
             CheckLocks();
         }
         else
+        {
             LockOut();
+        }
     }
 
     void RandomiseButtonOrder()
     {
-        int button1ID = Random.Range(0,100);
+        int button1ID = Random.Range(0, 100);
         int button2ID = Random.Range(0, 100);
         int button3ID = Random.Range(0, 100);
         int button4ID = Random.Range(0, 100);
@@ -183,23 +206,34 @@ public class Safe : MonoBehaviour
             }
         }
 
+        /*for (int i = 0; i < m_rankOrder.Length; i++)
+        {
+            print(m_rankOrder[i]);
+        }*/
+        //print(string.Format("{0},{1},{2},{3}", m_rankOrder[0], m_rankOrder[1], m_rankOrder[2], m_rankOrder[3]));
         string message = string.Format("////CONFIDENTIAL////\n---For Authorised Personnel Only---\n The order of the buttons are: \n{0},{1},{2},{3}", shapeNames[m_rankOrder[0]-1], shapeNames[m_rankOrder[1]-1], shapeNames[m_rankOrder[2]-1], shapeNames[m_rankOrder[3]-1]);//all goes wrong, remove shapenames part
         m_hackingDocumentScript.RecieveDocumentMessages(message, 3);
+        documentButton.GetComponent<DocumentButton>().documentText = string.Format("The order of the shapes are: \n{0}, {1}, {2}, {3}", shapeNames[m_rankOrder[0] - 1], shapeNames[m_rankOrder[1] - 1], shapeNames[m_rankOrder[2] - 1], shapeNames[m_rankOrder[3] - 1]);
         scientistComputerScript.ReceiveSequence(message);
-
         for (int i = 0; i < 4; i++)
-            m_safeLockScript.sequenceOrder[i] = m_rankOrder[i];
-    }
+        {
+            m_safeLockScript.sequenceOrder[i] = m_rankOrder[i]; 
+        }
 
+    }
+    public Button documentButton;
     public void ButtonSequence(int currentButton)
     {
         if(m_pressOrder == m_rankOrder[currentButton])
         {
+            //correct
             m_pressOrder += 1;
+            print("correct");
             if(m_pressOrder > 4)
             {
                 m_buttonLock = true;
                 CheckLocks();
+                //unlocked
             }
         }
         else
@@ -207,7 +241,13 @@ public class Safe : MonoBehaviour
             m_pressOrder = 1;
             print("Wrong!");
             LockOut();
+            //reset
         }
+    }
+
+    void ResetButtons()
+    {
+
     }
 
     public void CheckPassword()
@@ -230,9 +270,11 @@ public class Safe : MonoBehaviour
         sequenceText.text = string.Format("Lock Status (Button Sequence): Unlocked = {0}", m_buttonLock);
         passwordText.text = string.Format("Lock Status (Password): Unlocked = {0}", m_passwordLock);
         starsignText.text = string.Format("Lock Status (Starsign): Unlocked = {0}", m_starsignLock);
-
         if (m_buttonLock && m_passwordLock && m_starsignLock)
+        {
             openSafeButton.interactable = true;
+            
+        }
     }
 
     void GetPassword()
@@ -250,5 +292,6 @@ public class Safe : MonoBehaviour
     {
         doorPivot.SetTrigger("Unlocked");
         safeCanvas.enabled = false;
+		EmptySafe ();
     }
 }

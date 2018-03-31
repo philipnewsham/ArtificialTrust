@@ -5,16 +5,16 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Component:
-  - component: {fileID: 419458}
-  - component: {fileID: 11428908}
-  - component: {fileID: 11473242}
-  - component: {fileID: 11443238}
-  - component: {fileID: 11482772}
-  - component: {fileID: 114000012155870090}
-  - component: {fileID: 114000013415003234}
-  - component: {fileID: 114000011229986512}
+  - 4: {fileID: 419458}
+  - 114: {fileID: 11428908}
+  - 114: {fileID: 11473242}
+  - 114: {fileID: 11443238}
+  - 114: {fileID: 11482772}
+  - 114: {fileID: 114000012155870090}
+  - 114: {fileID: 114000013415003234}
+  - 114: {fileID: 114000011229986512}
   m_Layer: 0
   m_Name: AI
   m_TagString: AI
@@ -31,10 +31,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11428908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -61,7 +61,9 @@ MonoBehaviour:
   m_lightToggleInstantiateScript: {fileID: 0}
   m_cameraToggleInstantiateScript: {fileID: 0}
   m_doorToggleInstantiateScript: {fileID: 0}
+  robotBodyPasswordButtonScript: {fileID: 0}
   aiSwitchButton: {fileID: 0}
+  powerBar: {fileID: 0}
 --- !u!114 &11443238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,6 +86,8 @@ MonoBehaviour:
   - {fileID: 0}
   unlockingTime: 10
   openingTime: 3
+  doorButtons: []
+  taskLogScript: {fileID: 0}
 --- !u!114 &11473242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -104,6 +108,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  taskLogScript: {fileID: 0}
+  lightButtons: []
 --- !u!114 &11482772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -145,6 +151,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  cameraButtons: []
+  taskLogScript: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

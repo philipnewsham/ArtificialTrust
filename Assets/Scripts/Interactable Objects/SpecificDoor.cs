@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
-public class SpecificDoor : MonoBehaviour
-{
+public class SpecificDoor : MonoBehaviour {
     public GameObject door;
     private GameObject m_door { get { return door; } }
     public bool m_powerOn;
@@ -35,8 +33,7 @@ public class SpecificDoor : MonoBehaviour
     private bool m_inAction = false;
 
     private bool m_unlockedByScientist;
-
-    void Start()
+    void Awake()
     {
         m_ai = GameObject.FindGameObjectWithTag("AI");
         m_audioSource = gameObject.GetComponent<AudioSource>();
@@ -49,12 +46,28 @@ public class SpecificDoor : MonoBehaviour
         m_unlockingTime = m_doorControllerScript.unlockingTime;
         m_openingTime = m_doorControllerScript.openingTime;
         m_panelStatus = gameObject.GetComponentsInChildren<Text>();
-
         if (!m_powerOn)
+        {
             OpenDoor();
-
+        }
         CheckMaterial();
     }
+
+    public void TutorialDoor(bool isOpening)
+    {
+        if(isOpening)
+        {
+            m_animator.SetTrigger("Open");
+            //m_renderer.material = materials[1];
+        }
+        else
+        {
+            m_animator.SetTrigger("Closed");
+            //m_renderer.material = materials[0];
+        }
+    }
+
+
 
     public void Interact()
     {
@@ -75,7 +88,6 @@ public class SpecificDoor : MonoBehaviour
                 m_audioSource.clip = audioClips[2];
                 m_audioSource.Play();
             }
-
             m_inAction = true;
         }
     }
@@ -87,55 +99,100 @@ public class SpecificDoor : MonoBehaviour
         m_audioSource.clip = audioClips[1];
         m_audioSource.Play();
     }
+	public Sprite[] lockImages;
+	public Color[] backgroundColours;
 
+	public Image[] keypadLockImages;
+	public Image[] backgroundColourImage;
+	public Text[] lockText;
     void CheckMaterial()
     {
-        m_renderer.material = materials[m_locked ? 0 : 1];
+		//print ("should change " + m_locked);
+        if (m_locked)
+        {
+            //m_renderer.material = materials[0];
+			for (int i = 0; i < 2; i++) 
+			{
+				keypadLockImages[i].sprite = lockImages [1];
+				backgroundColourImage [i].color = backgroundColours [1];
+				lockText[i].text = "Locked";
+			}
+        }
+        else
+        {
+            //m_renderer.material = materials[1];
+			for (int i = 0; i < 2; i++) 
+			{
+				keypadLockImages [i].sprite = lockImages [0];
+				backgroundColourImage [i].color = backgroundColours [0];
+				lockText[i].text = "Unlocked";
+			}
+		}
     }
+
+	void SwitchOff()
+	{			
+		for (int i = 0; i < 2; i++) 
+		{
+			keypadLockImages [i].sprite = lockImages[2];
+			backgroundColourImage [i].color = new Color(0,0,0,1);
+			lockText[i].text = "";
+		}
+
+	}
 
     public void DoorPower(string toggleDoor)
     {
-        switch (toggleDoor)
+        if (toggleDoor == "Lock")
         {
-            case "Lock":
-                m_locked = true;
-                if (m_powerOn)
-                    m_renderer.material = materials[0];
-                break;
-            case "Unlock":
-                m_locked = false;
-                if (m_powerOn)
-                    m_renderer.material = materials[1];
-                break;
-                case "Off":
-                    m_powerOn = false;
-                    OpenDoor();
-                    m_renderer.material = materials[2];
-                break;
-            case "On":
-                m_powerOn = true;
-                CloseDoor();
-                CheckMaterial();
-                break;
+            m_locked = true;
+            if (m_powerOn)
+            {
+                //m_renderer.material = materials[0];
+				CheckMaterial();
+            }
         }
+        if (toggleDoor == "Unlock")
+        {
+            m_locked = false;
+            if (m_powerOn)
+            {
+                //m_renderer.material = materials[1];
+				CheckMaterial();
+            }
+        }
+        if (toggleDoor == "Off")
+        {
+            m_powerOn = false;
+            OpenDoor();
+            //m_renderer.material = materials[2];
+			SwitchOff();
+			//CheckMaterial();
+        }
+		if (toggleDoor == "On") 
+		{
+			m_powerOn = true;
+			CloseDoor ();
+			CheckMaterial ();
+		}
     }
 
     void OpenDoor()
     {
         m_animator.SetTrigger("Open");
         m_doorAudioSource.Play();
-
         if (m_powerOn)
+        {
             Invoke("CloseDoor", 5f);
-
+        }
         if (m_locked && m_unlockedByScientist)
         {
             m_locked = false;
-            m_renderer.material = materials[1];
-            doorToggleInstantiateScript.DisabledLock(m_doorID);
+            //m_renderer.material = materials[1];
+			CheckMaterial();
+            //doorToggleInstantiateScript.DisabledLock(m_doorID);
             m_unlockedByScientist = false;
         }
-
         UnlockedSound();
     }
 

@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class RobotBody : MonoBehaviour
-{
+public class RobotBody : MonoBehaviour {
     public int powerNeeded;
     private int m_powerNeeded { get { return powerNeeded; } }
     private float m_powerGiven;
@@ -35,9 +34,9 @@ public class RobotBody : MonoBehaviour
     public GameObject ai;
     private AIPower m_aiPower;
     private DoorController m_doorControllerScript;
-    
-	void Start ()
-    {
+
+	// Use this for initialization
+	void Start () {
         m_passwordGeneratorScript = gameController.GetComponent<PasswordGenerator>();
         m_aiPower = ai.GetComponent<AIPower>();
         m_doorControllerScript = ai.GetComponent<DoorController>();
@@ -52,19 +51,31 @@ public class RobotBody : MonoBehaviour
 
     public void PoweringUp()
     {
+        if(!m_poweringUp)
+        {
+            m_currentPower = m_aiPower.CurrentPower();
+            m_aiPower.PowerExchange(-m_currentPower);
+            m_poweringUp = true;
+        }
+        /*
         if (!m_poweringUp)
         {
             float percentage = Mathf.FloorToInt(choosePowerSlider.value);
             m_currentPower = Mathf.FloorToInt((m_aiPower.totalPower * 0.01f) * percentage);
             print(m_aiPower.totalPower * 0.01f);
             print(m_currentPower);
-
-            if (m_aiPower.CheckPower(m_currentPower))
+            if (m_aiPower.CheckPower(m_currentPower) == true)
             {
                 m_poweringUp = true;
                 m_aiPower.PowerExchange(-m_currentPower);
             }
+            else
+            {
+                print("Not enough Power");
+            }
+            
         }
+        */
     }
 
     public void StopPowering()
@@ -88,6 +99,8 @@ public class RobotBody : MonoBehaviour
                 StopPowering();
                 m_poweredLock = true;
                 CheckLocks();
+                print("Robot Powered Up!");
+                
             }
         }
     }
@@ -101,12 +114,25 @@ public class RobotBody : MonoBehaviour
 
     void CheckLocks()
     {
-        poweredText.text = string.Format("Lock Status (Power): Unlocked = {0}", m_poweredLock);
-        passwordText.text = string.Format("Lock Status (Password): Unlocked = {0}", m_passwordLock);
-        switchesText.text = string.Format("Lock Status (Switches): Unlocked = {0}", m_switchLock);
+        if(m_poweredLock)
+            poweredText.text = string.Format("<color=#00FF00>Lock Status (Power): Unlocked = {0}</color>", m_poweredLock);
+        else
+            poweredText.text = string.Format("<color=red>Lock Status (Power): Unlocked = {0}</color>", m_poweredLock);
+
+        if(m_passwordLock)
+            passwordText.text = string.Format("<color=#00FF00>Lock Status (Password): Unlocked = {0}</color>", m_passwordLock);
+        else
+            passwordText.text = string.Format("<color=red>Lock Status (Password): Unlocked = {0}</color>", m_passwordLock);
+
+        if(m_switchLock)
+            switchesText.text = string.Format("<color=#00FF00>Lock Status (Switches): Unlocked = {0}</color>", m_switchLock);
+        else
+            switchesText.text = string.Format("<color=red>Lock Status (Switches): Unlocked = {0}</color>", m_switchLock);
 
         if (m_poweredLock && m_passwordLock && m_switchLock)
+        {
             enterRobotButton.interactable = true;
+        }
     }
 
     public void CheckPassword()
@@ -117,6 +143,10 @@ public class RobotBody : MonoBehaviour
             passwordInputField.interactable = false;
             CheckLocks();
         }
+        else
+        {
+            passwordInputField.text = "";
+        }
     }
 
     public void SavedUnlocking()
@@ -126,16 +156,17 @@ public class RobotBody : MonoBehaviour
         m_switchLock = true;
         CheckLocks();
     }
-
+	public GameObject baseRobot;
     public void EnterRobot()
     {
         Invoke("SwapToBody", 1f);
-        robotBodyCanvas.GetComponent<Animator>().SetTrigger("Enter");
+        //robotBodyCanvas.GetComponent<Animator>().SetTrigger("Enter");
         m_doorControllerScript.AllPowerOff();
     }
 
     void SwapToBody()
     {
+		baseRobot.SetActive (false);
         robotBodyCanvas.SetActive(false);
         robotBodyController.SetActive(true);
         aiCamera.SetActive(false);

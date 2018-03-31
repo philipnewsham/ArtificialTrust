@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DisableCamera : MonoBehaviour
-{
+public class DisableCamera : MonoBehaviour {
     public int cameraID;
     private Camera m_camera;
     private GameObject m_gameController;
@@ -16,7 +15,6 @@ public class DisableCamera : MonoBehaviour
     private float m_shutOutTime = 10f;
     public AudioClip[] audioClips;
     private AudioSource m_audioSource;
-
     void Start()
     {
         m_audioSource = gameObject.GetComponent<AudioSource>();
@@ -26,6 +24,8 @@ public class DisableCamera : MonoBehaviour
         m_cameraControllerScript = m_ai.GetComponent<CameraController>();
         m_freezeControlScript = m_gameController.GetComponent<FreezeControls>();
         m_cameraTime = m_shutOutTime;
+
+        //gameObject.SetActive(false);
     }
 
     void Update()
@@ -33,7 +33,6 @@ public class DisableCamera : MonoBehaviour
         if (m_countingDown)
         {
             m_cameraTime -= 1 * Time.deltaTime;
-
             if (m_cameraTime <= 0f)
             {
                 m_countingDown = false;
@@ -66,6 +65,8 @@ public class DisableCamera : MonoBehaviour
 
     void SwitchOff()
     {
+        print("switch off");
+        //m_cameraControllerScript.CameraSwitch(cameraID);
         m_countingDown = true;
         m_freezeControlScript.FirstPersonControllerEnabled(true);
         m_cameraToggleInstantiateScript.DisabledCamera(cameraID);
