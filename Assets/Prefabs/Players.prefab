@@ -83,6 +83,8 @@ GameObject:
   - component: {fileID: 114000011720454050}
   - component: {fileID: 114000014040284594}
   - component: {fileID: 114000012430745214}
+  - component: {fileID: 114849526035745462}
+  - component: {fileID: 114693778341400078}
   m_Layer: 0
   m_Name: AI
   m_TagString: AI
@@ -122,9 +124,19 @@ GameObject:
   - component: {fileID: 82000011777628222}
   - component: {fileID: 136000013565544854}
   - component: {fileID: 114000010113689920}
+  - component: {fileID: 114553519606587628}
+  - component: {fileID: 114958742130886446}
+  - component: {fileID: 114142637012621696}
+  - component: {fileID: 114228413149198600}
+  - component: {fileID: 114016673585314356}
+  - component: {fileID: 114995470350117872}
+  - component: {fileID: 114589004541224154}
+  - component: {fileID: 114996487731806410}
+  - component: {fileID: 114907189209949444}
+  - component: {fileID: 114011837309625208}
   m_Layer: 0
-  m_Name: Scientist
-  m_TagString: Scientist
+  m_Name: Agent
+  m_TagString: Agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,6 +153,8 @@ GameObject:
   - component: {fileID: 81000012729328266}
   - component: {fileID: 124000010667702992}
   - component: {fileID: 114000012024838856}
+  - component: {fileID: 114614025093379830}
+  - component: {fileID: 114902394568542860}
   m_Layer: 0
   m_Name: FirstPersonCharacter
   m_TagString: MainCamera
@@ -189,7 +203,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010393309222}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000016292068}
-  m_LocalPosition: {x: -3.09, y: 1, z: 3.58}
+  m_LocalPosition: {x: 78.14, y: 5.18, z: 3.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000012194159752}
@@ -233,8 +247,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013898584196}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.79999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4000013204763354}
@@ -285,15 +299,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013820731908}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.71, y: 1, z: -4.11}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 94.55, y: 4.709, z: 6.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000011805695356}
   - {fileID: 4000012844987654}
   m_Father: {fileID: 4000011196965326}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4000013541058160
 Transform:
   m_ObjectHideFlags: 1
@@ -337,11 +351,10 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
-  m_AllowMSAA: 1
-  m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!20 &20000013116805552
 Camera:
   m_ObjectHideFlags: 1
@@ -372,11 +385,10 @@ Camera:
   m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 0
-  m_AllowMSAA: 1
-  m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
 --- !u!23 &23000010157200436
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -386,7 +398,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -402,14 +413,12 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!23 &23000010856849588
 MeshRenderer:
@@ -420,7 +429,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -436,14 +444,12 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!23 &23000012811314552
 MeshRenderer:
@@ -454,7 +460,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -470,14 +475,12 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000012691747808
 MeshFilter:
@@ -564,9 +567,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 5
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -740,14 +743,12 @@ MonoBehaviour:
   totalPower: 30
   powerText:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   m_lightToggleInstantiateScript: {fileID: 0}
   m_cameraToggleInstantiateScript: {fileID: 0}
   m_doorToggleInstantiateScript: {fileID: 0}
   robotBodyPasswordButtonScript: {fileID: 0}
   aiSwitchButton: {fileID: 0}
+  powerBar: {fileID: 0}
 --- !u!114 &114000011025302318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -776,6 +777,8 @@ MonoBehaviour:
     smooth: 0
     smoothTime: 5
     lockCursor: 1
+    alternateControlSchemeScreen: 0
+    alternateControlSchemeMouse: 0
   m_UseFovKick: 1
   m_FovKick:
     Camera: {fileID: 0}
@@ -784,13 +787,16 @@ MonoBehaviour:
     TimeToIncrease: 1
     TimeToDecrease: 1
     IncreaseCurve:
+      serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 1
         inSlope: 2
         outSlope: 2
@@ -803,28 +809,34 @@ MonoBehaviour:
     HorizontalBobRange: 0.1
     VerticalBobRange: 0.1
     Bobcurve:
+      serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 0.5
+      - serializedVersion: 2
+        time: 0.5
         value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1.5
+      - serializedVersion: 2
+        time: 1.5
         value: -1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 2
+      - serializedVersion: 2
+        time: 2
         value: 0
         inSlope: 0
         outSlope: 0
@@ -842,6 +854,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  alternativeControlMouse: 0
+  alternativeControlScreen: 0
+  touchVertical: 0
+  vertical: 0
 --- !u!114 &114000011453330760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -862,8 +878,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  unlockingTime: 10
-  openingTime: 3
+  unlockingTime: 5
+  openingTime: 1
+  doorButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  taskLogScript: {fileID: 0}
 --- !u!114 &114000011709408614
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -877,7 +903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isScientist: 1
   m_IsWalking: 0
-  m_WalkSpeed: 4
+  m_WalkSpeed: 5
   m_RunSpeed: 10
   m_RunstepLenghten: 0.7
   m_JumpSpeed: 10
@@ -892,6 +918,8 @@ MonoBehaviour:
     smooth: 0
     smoothTime: 5
     lockCursor: 0
+    alternateControlSchemeScreen: 0
+    alternateControlSchemeMouse: 0
   m_UseFovKick: 1
   m_FovKick:
     Camera: {fileID: 0}
@@ -900,13 +928,16 @@ MonoBehaviour:
     TimeToIncrease: 1
     TimeToDecrease: 1
     IncreaseCurve:
+      serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 1
         inSlope: 2
         outSlope: 2
@@ -919,28 +950,34 @@ MonoBehaviour:
     HorizontalBobRange: 0.1
     VerticalBobRange: 0.1
     Bobcurve:
+      serializedVersion: 2
       m_Curve:
-      - time: 0
+      - serializedVersion: 2
+        time: 0
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 0.5
+      - serializedVersion: 2
+        time: 0.5
         value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1
+      - serializedVersion: 2
+        time: 1
         value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 1.5
+      - serializedVersion: 2
+        time: 1.5
         value: -1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-      - time: 2
+      - serializedVersion: 2
+        time: 2
         value: 0
         inSlope: 0
         outSlope: 0
@@ -958,6 +995,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
   m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  alternativeControlMouse: 0
+  alternativeControlScreen: 0
+  touchVertical: 0
+  vertical: 0
 --- !u!114 &114000011720454050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -996,11 +1037,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8818ce2ad5ee5ec499b5f527dc8d4b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 2
+  distance: 5
   gameController: {fileID: 0}
   interactText: {fileID: 0}
   aButton: {fileID: 0}
   scientistRules: {fileID: 0}
+  waitImage: {fileID: 0}
+  maxHold: 2
+  interactionInfoText: {fileID: 0}
+  interactionInfoPanel: {fileID: 0}
+  currentObjectiveUI: {fileID: 0}
+  freezeControlScript: {fileID: 0}
 --- !u!114 &114000012318166052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1029,6 +1076,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lights:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  taskLogScript: {fileID: 0}
+  agentObjectiveScript: {fileID: 114142637012621696}
+  lightButtons:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -1080,6 +1138,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   cameras:
   - {fileID: 0}
   - {fileID: 0}
@@ -1101,6 +1160,37 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  cameraButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  taskLogScript: {fileID: 0}
+  agentObjectiveScript: {fileID: 114142637012621696}
+  cameraText:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cameraRecImage:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentCameraNo: 0
+  roomNameText: {fileID: 0}
 --- !u!114 &114000012717913248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1117,6 +1207,12 @@ MonoBehaviour:
   interactText: {fileID: 0}
   aButton: {fileID: 0}
   scientistRules: {fileID: 0}
+  waitImage: {fileID: 0}
+  maxHold: 0
+  interactionInfoText: {fileID: 0}
+  interactionInfoPanel: {fileID: 0}
+  currentObjectiveUI: {fileID: 0}
+  freezeControlScript: {fileID: 0}
 --- !u!114 &114000014040284594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1128,9 +1224,262 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4c976e5a0627547aef1e73ba527bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winConditions: []
-  completedTask: 1
-  scientistLoseCanvas: {fileID: 0}
+  mainObjective: 0
+  completedMission: 0
+--- !u!114 &114011837309625208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c01abbaef138b4db67bdf8d6ac44c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startMenu: {fileID: 0}
+  objectivePanel: {fileID: 0}
+  mapPanel: {fileID: 0}
+  menuPanels:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  choosingMainObjectivesScript: {fileID: 0}
+  tabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  tabColours:
+  - serializedVersion: 2
+    rgba: 4294967295
+  - serializedVersion: 2
+    rgba: 4288059030
+--- !u!114 &114016673585314356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20ca2796d6493cf4eb1bdb5cd58018a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSpeed: 0
+  lookSensitivity: 0.7
+  virtualJoystick: {fileID: 0}
+--- !u!114 &114142637012621696
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 477f63e1f8d81784baa29d66d70f23ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  lightController: {fileID: 114000012333467278}
+  switchesScript: {fileID: 0}
+  switchOffAIScript: {fileID: 0}
+--- !u!114 &114228413149198600
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c04148ccd676fad409d8fb502ab9b84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSpeed: 2
+  mouseSensitivitySlider: {fileID: 0}
+--- !u!114 &114553519606587628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4107b87bb7842f44eb58be0ba989d12e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightController: {fileID: 114000012333467278}
+  objectiveText: {fileID: 0}
+--- !u!114 &114589004541224154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80e9a0bd1ad87bf4a8a14c485d339249, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainObjective: 0
+  completedMission: 0
+--- !u!114 &114614025093379830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013898584196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a970acddb8696a4792ca6e022840a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseTexture: {fileID: 2800000, guid: 45ca7cd7d934d6245bb4539f780e4892, type: 3}
+  UseHighPrecisionDepthMap: 0
+  Samples: 2
+  Downsampling: 1
+  Radius: 0.12
+  Intensity: 2.5
+  Distance: 1
+  Bias: 0.1
+  LumContribution: 0.5
+  OcclusionColor: {r: 0, g: 0, b: 0, a: 1}
+  CutoffDistance: 150
+  CutoffFalloff: 50
+  Blur: 2
+  BlurDownsampling: 0
+  BlurPasses: 1
+  BlurBilateralThreshold: 10
+  DebugAO: 0
+--- !u!114 &114693778341400078
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012324150522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb38e206bb7525940bfcdd7b181d63da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiMessageText: {fileID: 0}
+  scientistRecieveText: {fileID: 0}
+--- !u!114 &114849526035745462
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012324150522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90ea48843c436be4c9ea7a9142264829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveText:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  choosingMainObjectiveScript: {fileID: 0}
+  checkRoomScript: {fileID: 114995470350117872}
+  timerScript: {fileID: 0}
+--- !u!114 &114902394568542860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013898584196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2678aa096eb064caa72f47d483baa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowScreenControls: 0
+  SceneTintsBloom: 1
+  DirtinessTexture: {fileID: 2800000, guid: e6238585ed281614cb707a38d3d16d02, type: 3}
+  Iterations: 4
+  Downsampling: 4
+  gain: 2.02
+  threshold: 1
+  BloomSize: 5
+  Dirtiness: 0
+  BloomIntensity: 1.78
+  BloomColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &114907189209949444
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d11a0c4e68666d40881ebf3d792d019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialObjectives:
+  - {fileID: 0}
+  - {fileID: 0}
+  mainObjectives:
+  - {fileID: 0}
+  - {fileID: 0}
+  hudObjective: {fileID: 0}
+--- !u!114 &114958742130886446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd60d00870aa62444b4ce6e78cb5780d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114995470350117872
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd3e8c1a03b79c46a95ee9708c20311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomNameText: {fileID: 0}
+  objectiveText: {fileID: 0}
+  mapLocations:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  standingMan: {fileID: 21300000, guid: a42dea5138264ae4799245aa2b6c1775, type: 3}
+  wayPoint: {fileID: 21300000, guid: 47afd5732a829764fbff38242a8d4c62, type: 3}
+  doorControllerScript: {fileID: 114000011453330760}
+  aiObjectiveScript: {fileID: 114849526035745462}
+--- !u!114 &114996487731806410
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013820731908}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02d8bf11fa79d240817d147f683b6f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectives:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!124 &124000010667702992
 Behaviour:
   m_ObjectHideFlags: 1

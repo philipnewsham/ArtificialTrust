@@ -5,10 +5,10 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Component:
-  - component: {fileID: 476990}
-  - component: {fileID: 11460496}
+  - 4: {fileID: 476990}
+  - 114: {fileID: 11460496}
   m_Layer: 0
   m_Name: SafeLogic II
   m_TagString: Untagged
@@ -25,10 +25,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11460496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -74,9 +74,11 @@ MonoBehaviour:
   sequenceOrder: 00000000000000000000000000000000
   safeCanvas: {fileID: 0}
   safe: {fileID: 0}
+  audioClips: []
   lockedOutPanel: {fileID: 0}
   lockedOutText: {fileID: 0}
   lockedOutTime: 60
+  ai: {fileID: 0}
   scientist: {fileID: 0}
   gameController: {fileID: 0}
   locksText: {fileID: 0}
@@ -87,6 +89,7 @@ MonoBehaviour:
   lockLights:
   - {fileID: 21300000, guid: 5b1a64ea234fb2343b8d0686c51280de, type: 3}
   - {fileID: 21300000, guid: 49b611e658efbf443b686a4036f74fe3, type: 3}
+  scientistComputerScript: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

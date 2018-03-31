@@ -3,10 +3,11 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
-
 public class Elevator : MonoBehaviour
 {
+    /*
     public bool firstElevator;
+    //public GameObject otherElevator;
     public Elevator otherElevatorScript;
 
     public GameObject scientist;
@@ -46,7 +47,6 @@ public class Elevator : MonoBehaviour
     public GameObject aiCountdownCanvas;
     private Text m_aiCountdownText;
     private bool m_secondPlayerIsScientist;
-
     void Start()
     {
         m_scientistWinScript = scientist.GetComponent<ScientistWin>();
@@ -58,9 +58,12 @@ public class Elevator : MonoBehaviour
         m_scientistCountdownText = scientistCountdownCanvas.GetComponentInChildren<Text>();
         m_aiCountdownText = aiCountdownCanvas.GetComponentInChildren<Text>();
         m_elevatorAnim.SetTrigger("Close");
-
         if(firstElevator)
+        {
             Invoke("OpenElevator", 5f);
+        }
+        
+        
     }
 
     void OpenElevator()
@@ -94,35 +97,45 @@ public class Elevator : MonoBehaviour
         {
             m_countingDownTime -= 1 * Time.deltaTime;
             if (m_secondPlayerIsScientist)
+            {
                 m_scientistCountdownText.text = string.Format("Time remaining before building goes into lockdown: {0}s!", Mathf.FloorToInt(m_countingDownTime));
+            }
             else
+            {
                 m_aiCountdownText.text = string.Format("Time remaining before building goes into lockdown: {0}s!", Mathf.FloorToInt(m_countingDownTime));
-
+            }
             if(m_countingDownTime <= 0)
+            {
                 CountDownOver();
+            }
         }
     }
 
     void CountDownStart(string otherPlayer)
     {
         m_isCountingDown = true;
-
         if(otherPlayer == "Scientist")
+        {
             scientistCountdownCanvas.SetActive(true);
+        }
         else
+        {
             aiCountdownCanvas.SetActive(true);
+        }
     }
 
     void CountDownOver()
     {
         scientistCountdownCanvas.SetActive(false);
         aiCountdownCanvas.SetActive(false);
-
         if (m_secondPlayerIsScientist)
+        {
             scientistLosesCanvas.SetActive(true);
+        }
         else
+        {
             aiLosesCanvas.SetActive(true);
-
+        }
         otherElevatorScript.SecondElevator("Close");
         Invoke("ExitToMainMenu", 5f);
     }
@@ -133,6 +146,7 @@ public class Elevator : MonoBehaviour
         {
             if (other.gameObject.tag == "Scientist")
             {
+                //print("Scientist");
                 if (m_scientistWinScript.completedTask)
                 {
                     ElevatorOn("Scientist");
@@ -158,8 +172,17 @@ public class Elevator : MonoBehaviour
         }
         else
         {
-            ShowSavedCanvas(other.gameObject.tag == "Scientist" ? "Scientist" : "AI");
+            if(other.gameObject.tag == "Scientist")
+            {
+                ShowSavedCanvas("Scientist");
+            }
+            else
+            {
+                //robotBodyController.UpdateCursorLock();
+                ShowSavedCanvas("AI");
+            }
             otherElevatorScript.m_isCountingDown = false;
+            
             Invoke("ExitToMainMenu", 10);
         }
     }
@@ -169,10 +192,15 @@ public class Elevator : MonoBehaviour
         m_elevatorAnim.SetTrigger("Close");
         m_audioSources[1].Play();
         m_audioSources[0].Play();
+        print("Elevator close");
         if(player == "Scientist")
+        {
             scientistDecidesCanvas.SetActive(true);
+        }
         else
+        {
             aiDecidesCanvas.SetActive(true);
+        }
     }
 
     public void OtherPlayerSaved()
@@ -180,8 +208,12 @@ public class Elevator : MonoBehaviour
         if (firstElevator)
         {
             otherElevatorScript.SecondElevator("Open");
+            //otherElevator.GetComponent<AudioSource>().Play();
+            print("other elevator open");
             if (!m_scientistWins)
+            {
                 scientistSavedCanvas.SetActive(true);
+            }
         }
     }
 
@@ -195,19 +227,26 @@ public class Elevator : MonoBehaviour
     void ShowSavedCanvas(string player)
     {
         if(player == "Scientist")
+        {
             scientistSavedElevatorCanvas.SetActive(true);
+        }
         else
+        {
             aiSavedElevatorCanvas.SetActive(true);
+        }
         m_elevatorAnim.SetTrigger("Close");
     }
 
     public void LeavePlayer(string otherPlayer)
     {
         if(otherPlayer == "Scientist")
+        {
             scientistLosesCanvas.SetActive(true);
+        }
         else
+        {
             aiLosesCanvas.SetActive(true);
-
+        }
         Invoke("ExitToMainMenu", 10);
     }
 
@@ -216,4 +255,5 @@ public class Elevator : MonoBehaviour
         robotBodyController.UpdateCursorLock();
         SceneManager.LoadScene(0);
     }
+    */
 }
