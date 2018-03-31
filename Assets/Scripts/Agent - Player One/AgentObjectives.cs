@@ -23,10 +23,10 @@ public class AgentObjectives : MonoBehaviour
         }
 		ChoosingGoals ();
     }
-
-	//public Text objectiveText;
+    
     public Text[] objectiveTexts;
     private string[] objectiveStrings = new string[3];
+
     void ChoosingGoals()
     {
         for (int i = 0; i < m_goalAmount; i++)
@@ -40,10 +40,10 @@ public class AgentObjectives : MonoBehaviour
                     CamerasOnObjective(i, 8, false);
                     break;
                 case 2:
-				LightSwitchSequenceObjective(i, false);
+				    LightSwitchSequenceObjective(i, false);
                     break;
                 case 3:
-				WaitInRoomObjective(i, false);
+				    WaitInRoomObjective(i, false);
                     break;
                 case 4:
                     SwitchPositions(i, false);
@@ -56,12 +56,11 @@ public class AgentObjectives : MonoBehaviour
                     break;
             }
         }
-		//objectiveText.text = "Current Objectives:";
+
 		for (int i = 0; i < m_subGoals.Length; i++) 
 		{
             objectiveStrings[i] = string.Format("{0}", m_goalTexts[i]);
             objectiveTexts[i].text = string.Format("<color=red>INCOMPLETE: {0}</color>", objectiveStrings[i]);
-            //objectiveTexts[i].text = objectiveStrings[i];
         }
     }
 
@@ -82,11 +81,7 @@ public class AgentObjectives : MonoBehaviour
         {
 			if (m_isLightObjectective) 
 			{
-				if (lightsOn == m_lightAmount)
-					m_goalComplete [m_lightOnGoalNo] = true;
-				else
-					m_goalComplete [m_lightOnGoalNo] = false;
-
+                m_goalComplete[m_lightOnGoalNo] = (lightsOn == m_lightAmount);
 				CheckObjectives ();
 			}
         }
@@ -109,11 +104,7 @@ public class AgentObjectives : MonoBehaviour
         {
 			if (m_isCameraObjective) 
 			{
-				if (camerasOn == m_cameraAmount)
-					m_goalComplete [cameraOnGoalNo] = true;
-				else
-					m_goalComplete [cameraOnGoalNo] = false;
-
+                m_goalComplete[cameraOnGoalNo] = (camerasOn == m_cameraAmount);
 				CheckObjectives ();
 			}
         }
@@ -155,7 +146,8 @@ public class AgentObjectives : MonoBehaviour
 	private string[] m_roomName = new string[9] { "Main Laboratory", "Small Office", "Server Room", "AI HUB", "Archives", "Dr. Kirkoff's Office", "Corridor One", "Corridor Two", "Corridor Three" };
 	public void WaitInRoomObjective(int goalNo, bool isComplete)
     {
-		if (!isComplete) {
+		if (!isComplete)
+        {
 			m_waitRoomGoalNo = goalNo;
 			m_roomWaitNo = Random.Range (0, 6);
 			m_roomWaitSeconds = Random.Range (4, 12);
@@ -179,9 +171,8 @@ public class AgentObjectives : MonoBehaviour
         {
             m_switchGoalNo = goalNo;
             for (int i = 0; i < 3; i++)
-            {
                 m_switchPositions[i] = Random.Range(0, 2);
-            }
+
             m_goalTexts[goalNo] = string.Format("Put the switches in the server room to {0}, {1}, {2}", m_switchPositions[0], m_switchPositions[1], m_switchPositions[2]);
             switchesScript.AgentSwitchPositions(m_switchPositions[0], m_switchPositions[1], m_switchPositions[2]);
         }
@@ -213,42 +204,20 @@ public class AgentObjectives : MonoBehaviour
         }
     }
 
-    /*
-	void ObjectiveText()
-	{
-		string objectiveOne = string.Format("Have {0} lights on at the same time", m_lightAmount);
-		string objectiveTwo = string.Format("Have {0} cameras enabled at the same time", m_cameraAmount);
-		string objectiveThree = string.Format("Switch the light in {0}, then switch the light in {1} within {2} seconds", m_lightLocations[m_firstLight], m_lightLocations[m_secondLight], m_seconds);
-		string objectiveFour = string.Format("Wait inside {0} for {1} seconds", m_roomName[m_roomWaitNo], m_roomWaitSeconds);
-
-		objectiveText.text = "Current Objectives:";
-		objectiveText.text += string.Format("\n{0}", objectiveOne);
-		objectiveText.text += string.Format("\n{0}", objectiveTwo);
-		objectiveText.text += string.Format("\n{0}", objectiveThree);
-		objectiveText.text += string.Format("\n{0}", objectiveFour);
-	}
-	*/
-
     public SwitchOffAI switchOffAIScript;
     
     void CheckObjectives()
     {
         int goalsDone = 0;
         switchOffAIScript.UpdateSubObjectives(m_goalComplete);
+
         for (int i = 0; i < m_goalAmount; i++)
         {
-            if (m_goalComplete[i])
-            {
-                goalsDone += 1;
-                objectiveTexts[i].text = string.Format("<color=green>COMPLETED: {0}</color>", objectiveStrings[i]);
-            }
-            else
-            {
-                objectiveTexts[i].text = string.Format("<color=red>INCOMPLETE: {0}</color>", objectiveStrings[i]);
-            }
-        }
+            string objText = m_goalComplete[i] ? "<color=green>COMPLETED:" : "<color=red>INCOMPLETE:";
+            objectiveTexts[i].text = string.Format("{1} {0}</color>", objectiveStrings[i], objText);
 
-        if (goalsDone == m_goalAmount)
-            print("Sub Objectives Completed!");
+            if (m_goalComplete[i])
+                goalsDone += 1;
+        }
     }
 }

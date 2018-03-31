@@ -8,12 +8,12 @@ public class SoundScape : MonoBehaviour
     private AudioSource[] m_audioSource;
     private Animator m_animator;
     public float offset;
+
     void Start()
     {
         m_audioSource = GetComponents<AudioSource>();
         m_animator = GetComponent<Animator>();
         InvokeRepeating("SoundOne", offset, 6);
-        //InvokeRepeating("SoundTwo", 3, 6);
     }
 
     void SoundOne()
@@ -27,18 +27,7 @@ public class SoundScape : MonoBehaviour
         m_audioSource[0].clip = sfx[Random.Range(0, sfx.Length)];
         m_audioSource[0].Play();
     }
-    /*
-    bool m_mute;
 
-    IEnumerator ChangeClipOne()
-    {
-        while(!m_mute)
-        {
-            yield return new WaitForFixedUpdate();
-        }
-        m_mute = true;
-    }
-    */
     void SoundTwo()
     {
         Invoke("ChangeClipTwo", 1);

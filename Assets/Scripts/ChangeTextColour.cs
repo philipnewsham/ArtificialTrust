@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class ChangeTextColour : MonoBehaviour
 {
     private Text[] m_textChildren;
     public bool onEnable;
     private Image m_image;
-    //private Color32[] m_colours = new Color32[2];
     private bool m_animationOn;
     private bool m_flashOn = true;
     private float m_colourFloat;
@@ -16,6 +16,7 @@ public class ChangeTextColour : MonoBehaviour
     {
         m_textChildren = GetComponentsInChildren<Text>();
         m_image = GetComponent<Image>();
+
         if (onEnable)
             AnimationTrigger();
     }
@@ -23,6 +24,7 @@ public class ChangeTextColour : MonoBehaviour
     public void AnimationTrigger()
     {
         m_animationOn = !m_animationOn;
+
         if (m_animationOn)
             StartCoroutine("FlashAnimation");
     }
@@ -42,15 +44,11 @@ public class ChangeTextColour : MonoBehaviour
     {
         while(m_animationOn)
         {
-            if (m_flashOn)
-                m_colourFloat += 0.01f;
-            else
-                m_colourFloat -= 0.01f;
+            float cf = m_flashOn ? 0.01f : -0.01f;
+            m_colourFloat += cf;
 
             for (int i = 0; i < m_textChildren.Length; i++)
-            {
                 m_textChildren[i].color = new Color(1-m_colourFloat, 1-m_colourFloat, 1-m_colourFloat, 1);
-            }
 
             m_image.color = new Color(m_colourFloat, m_colourFloat, m_colourFloat, 1);
 

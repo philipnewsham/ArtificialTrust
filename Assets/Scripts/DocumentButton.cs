@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class DocumentButton : MonoBehaviour
 {
     public float powerNeeded;
@@ -27,19 +28,18 @@ public class DocumentButton : MonoBehaviour
 
     private DocumentController m_documentControllerScript;
     public int thisID;
+
 	void Start ()
     {
-        //Image[] images = GetComponentsInChildren<Image>();
-        //m_fillImage = images[1];
         m_documentControllerScript = GetComponentInParent<DocumentController>();
         m_aiPower = GameObject.FindGameObjectWithTag("AI").GetComponent<AIPower>();
         m_buttonText = GetComponentInChildren<Text>();
-        if (isUnlocked)
-            m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[2], 0.0f);
-        else
-            m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[0], 0.0f);
+        
+        UpdateButtonText(isUnlocked ? 2 : 0, 0.0f);
     }
+
     bool isDownloading;
+
     public void Clicked()
     {
         m_documentControllerScript.CurrentButton(thisID);
@@ -49,6 +49,7 @@ public class DocumentButton : MonoBehaviour
 
         m_currentPower = m_aiPower.CurrentPower();
         hoverTextbox.text = hoverText;
+
         if (m_isCompleted)
             informationTextbox.text = documentText;
     }
@@ -62,36 +63,38 @@ public class DocumentButton : MonoBehaviour
     public void HoverText(bool isHover)
     {
         if(isHover)
-        {
             hoverTextbox.text = hoverText;
-        }
-        else
-        {
-
-        }
     }
+
     float percentage;
+
 	void Update ()
     {
-		if(isDownloading)
+        if (!isDownloading)
+            return;
+
+        m_downloadedPower += m_currentPower * Time.deltaTime;
+        percentage = (m_downloadedPower / powerNeeded) * 100f;
+
+        if (m_downloadedPower >= powerNeeded)
         {
-            m_downloadedPower += m_currentPower * Time.deltaTime;
-            percentage = (m_downloadedPower / powerNeeded) * 100f;
-            //m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[1], percentage);
-            //m_fillImage.fillAmount = percentage;
-            if (m_downloadedPower >= powerNeeded)
-            {
-                DownloadComplete();
-                percentage = 100f;
-            }
-            m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[1], percentage);
+            DownloadComplete();
+            percentage = 100f;
         }
+        
+        UpdateButtonText(1, percentage);
 	}
 
     public void Unlocked()
     {
-        m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[2], 0.0f);
+        UpdateButtonText(2, 0.0f);
     }
+
+    void UpdateButtonText(int statusType,float percentage)
+    {
+        m_buttonText.text = string.Format("{0} - {1} {2}%", docName, m_currentStatus[statusType], percentage);
+    }
+
     void DownloadComplete()
     {
         isDownloading = false;

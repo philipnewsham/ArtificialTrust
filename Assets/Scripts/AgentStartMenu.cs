@@ -14,32 +14,25 @@ public class AgentStartMenu : MonoBehaviour
     public Image[] tabs;
     public Color32[] tabColours;
     private int m_currentTabInt;
-	// Use this for initialization
+
 	void Start ()
     {
         m_isOpen = true;
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         if (Input.GetKeyDown(KeyCode.Joystick1Button7))
-        {
             OpenClosePanel();
-        }
-        if (m_isOpen)
-        {
-            if (Input.GetButtonDown("ControllerX"))
-            {
-                SwapInformation();
-            }
 
-            if (Input.GetButtonDown("ControllerY"))
-            {
-                //SwapMapObjectives();
-                SwapTab();
-            }
-        }
+        if (!m_isOpen)
+            return;
+        
+        if (Input.GetButtonDown("ControllerX"))
+            SwapInformation();
+
+        if (Input.GetButtonDown("ControllerY"))
+            SwapTab();
     }
 
     void OpenClosePanel()
@@ -55,34 +48,19 @@ public class AgentStartMenu : MonoBehaviour
 
     void SwapTab()
     {
-        m_currentTabInt += 1;
-        if (m_currentTabInt == 3)
-            m_currentTabInt = 0;
+        m_currentTabInt = (m_currentTabInt + 1) % 3;
 
         for (int i = 0; i < 3; i++)
         {
-            if(m_currentTabInt == i)
-            {
-                tabs[i].color = tabColours[0];
-                menuPanels[i].SetActive(true);
-            }
-            else
-            {
-                tabs[i].color = tabColours[1];
-                menuPanels[i].SetActive(false);
-            }
+            tabs[i].color = tabColours[m_currentTabInt == i ? 0 : 1];
+            menuPanels[i].SetActive(m_currentTabInt == i);
         }
     }
 
     void SwapMapObjectives()
     {
         m_isObjectives = !m_isObjectives;
-
-        if (m_isObjectives)
-            m_currentTabInt = 0;
-        else
-            m_currentTabInt = 2;
-
+        m_currentTabInt = m_isObjectives ? 0 : 2;
         mapPanel.SetActive(!m_isObjectives);
         objectivePanel.SetActive(m_isObjectives);
         ChangeTabColours();
@@ -91,14 +69,6 @@ public class AgentStartMenu : MonoBehaviour
     void ChangeTabColours()
     {
         for (int i = 0; i < tabs.Length; i++)
-        {
-            if(m_currentTabInt != i)
-            {
-                tabs[i].color = tabColours[1];
-            }else
-            {
-                tabs[i].color = tabColours[0];
-            }
-        }
+            tabs[i].color = tabColours[m_currentTabInt != i ? 1 : 0];
     }
 }

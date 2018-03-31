@@ -12,13 +12,13 @@ public class WayfindingPath : MonoBehaviour
     {
         m_startingPoint = GetComponent<Transform>();
     }
+
     void OnTriggerEnter(Collider other)
     {
         m_currentPosition += 1;
+
         if(m_currentPosition != wayfindingPath.Length)
-        {
             transform.position = wayfindingPath[m_currentPosition].transform.position;
-        }
         else
         {
             gameObject.SetActive(false);
