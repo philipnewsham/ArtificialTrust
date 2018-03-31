@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
 public class SafeLocks : MonoBehaviour
 {
     private int m_lockLevel = 0;
@@ -64,18 +65,33 @@ public class SafeLocks : MonoBehaviour
 
     public ScientistComputer scientistComputerScript;
     public Button[] documentButtons;
+
     void Start ()
     {
-        //print("Start");
+        GetReferences();
+        UpdatePanels();
+
+        m_lockedOutTime = lockedOutTime;
+        m_countingDown = m_lockedOutTime;
+
+        locksText.text = string.Format("({0}/3) Locks Unlocked", m_locksUnlocked);
+
+        GenerateStarSign();
+
+        safeCanvas.SetActive(false);
+	}
+
+    void GetReferences()
+    {
         m_scientistWinScript = scientist.GetComponent<ScientistWin>();
         m_safeAS = safe.GetComponent<AudioSource>();
         m_freezeControls = gameController.GetComponent<FreezeControls>();
         m_hackingDocuments = ai.GetComponent<HackingDocuments>();
         m_safeAnim = safe.GetComponent<Animator>();
-        UpdatePanels();
-        m_lockedOutTime = lockedOutTime;
-        m_countingDown = m_lockedOutTime;
-        locksText.text = string.Format("({0}/3) Locks Unlocked", m_locksUnlocked);
+    }
+
+    void GenerateStarSign()
+    {
         m_correctStarSign = Random.Range(0, 12);
         starsignImage.sprite = starsigns[m_currentStarsign];
         string starsignMessage = string.Format("////CONFIDENTIAL////\n---For Authorised Personnel Only---\nThe star sign that unlocks the safe is {0}", starsignNames[m_correctStarSign]);
@@ -83,178 +99,146 @@ public class SafeLocks : MonoBehaviour
         scientistComputerScript.ReceiveStarsign(starsignMessage);
 
         m_hackingDocuments.RecieveDocumentMessages(starsignMessage, 4);
-        safeCanvas.SetActive(false);
+    }
 
-	}
-
-    // Update is called once per frame
-    void Update()
+    IEnumerator LockedOut()
     {
-        if (m_lockedOut)
+        PlaySound(2);
+        m_lockedOut = true;
+        lockedOutPanel.SetActive(true);
+
+        while (m_countingDown > 0.0f)
         {
             m_countingDown -= 1 * Time.deltaTime;
             lockedOutText.text = string.Format("PLEASE WAIT {0} SECONDS BEFORE TRYING AGAIN", Mathf.FloorToInt(m_countingDown));
-            if (m_countingDown <= 0f)
-            {
-                lockedOutPanel.SetActive(false);
-                m_lockedOut = false;
-                m_countingDown = m_lockedOutTime;
-            }
+            yield return null;
         }
-        if (m_isActive)
+
+        lockedOutPanel.SetActive(false);
+        m_lockedOut = false;
+        m_countingDown = m_lockedOutTime;
+    }
+    
+    void Update()
+    {
+
+        if (!m_isActive)
+            return;
+
+        if (Input.GetButtonDown("ControllerBack"))
+            LeaveSafe();
+
+        if (m_lockedOut)
+            return;
+
+        if (!m_dPadPressed)
         {
-            if (Input.GetButtonDown("ControllerBack"))
-            {
-                LeaveSafe();
-            }
+            m_dPadPressed = (Input.GetAxisRaw("DpadY") != 0);
+
+            if (Input.GetAxisRaw("DpadY") > 0)
+                MenuNavigation(true);
+
+            if (Input.GetAxisRaw("DpadY") < 0)
+                MenuNavigation(false);
         }
 
-        if (m_isActive && !m_lockedOut)
+        if ((Input.GetAxisRaw("DpadY") == 0) && (Input.GetAxisRaw("DpadX") == 0) && (m_dPadPressed))
+            m_dPadPressed = false;
+
+        if (Input.GetButtonDown("ControllerA"))
         {
-            if (!m_dPadPressed)
-            {
-                if (Input.GetAxisRaw("DpadY") > 0)
-                {
-                    print("up");
-                    m_dPadPressed = true;
-                    MenuNavigation(true);
-                }
-                if (Input.GetAxisRaw("DpadY") < 0)
-                {
-                    print("down");
-                    m_dPadPressed = true;
-                    MenuNavigation(false);
-                }
-            }
-
-            if ((Input.GetAxisRaw("DpadY") == 0) && (Input.GetAxisRaw("DpadX") == 0) && (m_dPadPressed))
-            {
-                m_dPadPressed = false;
-                //print("release");
-            }
-
-            if (Input.GetButtonDown("ControllerA"))
-            {
-                if (m_justPressed)
-                {
-                    GetButtonA();
-                }
-                else
-                {
-                    m_justPressed = true;
-                }
-            }
-            if (Input.GetButtonDown("ControllerB"))
-            {
-                GetButtonB();
-            }
-            if (Input.GetButtonDown("ControllerX"))
-            {
-                GetButtonX();
-            }
-            if (Input.GetButtonDown("ControllerY"))
-            {
-                GetButtonY();
-            }
+            if (m_justPressed)
+                GetButtonA();
+            else
+                m_justPressed = true;
         }
+
+        if (Input.GetButtonDown("ControllerB"))
+            GetButtonB();
+
+        if (Input.GetButtonDown("ControllerX"))
+            GetButtonX();
+
+        if (Input.GetButtonDown("ControllerY"))
+            GetButtonY();
     }
 
     public void UpdatePasswords()
     {
         for (int i = 0; i < 4; i++)
-        {
             passwordText[i].text = passwords[i];
-        }
     }
 
     void GetButtonA()
     {
-        if(m_lockLevel == 0)
+        switch (m_lockLevel)
         {
-            if (m_allLocks)
-            {
-                Invoke("OpenSafe",.5f);
-                m_safeAS.clip = audioClips[1];
-                m_safeAS.Play();
-            }
-            else
-            {
-                m_safeAS.clip = audioClips[0];
-                m_safeAS.Play();
-            }
-        }
-        if(m_lockLevel == 2)
-        {
-            CheckPasswords(passwords[2]);
-        }
-        if(m_lockLevel == 1)
-        {
-            ButtonSequence(4); 
-        }
-        if(m_lockLevel == 3)
-        {
-            if(!m_starsignLock)
-            ChangeStarSign(-1);
+            case 0:
+                if (m_allLocks)
+                {
+                    Invoke("OpenSafe", 0.5f);
+                    PlaySound(1);
+                }
+                else
+                    PlaySound(0);
+                break;
+            case 1:
+                ButtonSequence(4);
+                break;
+            case 2:
+                CheckPasswords(passwords[2]);
+                break;
+            case 3:
+                if (!m_starsignLock)
+                    ChangeStarSign(-1);
+                break;
         }
     }
+
     void GetButtonB()
     {
-        if (m_lockLevel == 0)
+        switch (m_lockLevel)
         {
-            //Nothing
-        }
-        if (m_lockLevel == 2)
-        {
-            CheckPasswords(passwords[1]);
-        }
-        if (m_lockLevel == 1)
-        {
-            ButtonSequence(3);
-        }
-        if (m_lockLevel == 3)
-        {
-            if (!m_starsignLock)
-                CheckStarsign();
-            //starsign select
+            case 1:
+                ButtonSequence(3);
+                break;
+            case 2:
+                CheckPasswords(passwords[1]);
+                break;
+            case 3:
+                if (!m_starsignLock)
+                    CheckStarsign();
+                break;
         }
     }
+
     void GetButtonX()
     {
-        if (m_lockLevel == 0)
+        switch (m_lockLevel)
         {
-            //nothing
-        }
-        if (m_lockLevel == 2)
-        {
-            CheckPasswords(passwords[3]);
-        }
-        if (m_lockLevel == 1)
-        {
-            ButtonSequence(1);
-        }
-        if (m_lockLevel == 3)
-        {
-            //nothing
+            case 1:
+                ButtonSequence(1);
+                break;
+            case 2:
+                CheckPasswords(passwords[3]);
+                break;
         }
     }
+
     void GetButtonY()
     {
-        if (m_lockLevel == 0)
+        switch (m_lockLevel)
         {
-            //nothing
-        }
-        if (m_lockLevel == 2)
-        {
-            CheckPasswords(passwords[0]);
-        }
-        if (m_lockLevel == 1)
-        {
-            ButtonSequence(2);
-        }
-        if (m_lockLevel == 3)
-        {
-            if (!m_starsignLock)
-                ChangeStarSign(1);
+            case 1:
+                ButtonSequence(2);
+                break;
+            case 2:
+                CheckPasswords(passwords[0]);
+                break;
+            case 3:
+                if (!m_starsignLock)
+                    ChangeStarSign(1);
+                break;
         }
     }
 
@@ -267,14 +251,15 @@ public class SafeLocks : MonoBehaviour
             m_freezeControls.FirstPersonControllerEnabled(false);
         }
     }
+
     void LeaveSafe()
     {
-        print("LeaveSafe");
         safeCanvas.SetActive(false);
         m_justPressed = false;
         m_isActive = false;
         m_freezeControls.FirstPersonControllerEnabled(true);
     }
+
     void MenuNavigation(bool moveUp)
     {
         if (!moveUp)
@@ -282,7 +267,7 @@ public class SafeLocks : MonoBehaviour
             if (m_lockLevel < lockPanels.Length - 1)
             {
                 m_lockLevel += 1;
-                NavigationSound();
+                PlaySound(6);
             }
         }
         else
@@ -290,46 +275,30 @@ public class SafeLocks : MonoBehaviour
             if(m_lockLevel > 0)
             {
                 m_lockLevel -= 1;
-                NavigationSound();
+                PlaySound(6);
             }
         }
         UpdatePanels();
-    }
-    void NavigationSound()
-    {
-        m_safeAS.clip = audioClips[6];
-        m_safeAS.Play();
     }
 
     void UpdatePanels()
     {
         for (int i = 0; i < lockPanels.Length; i++)
-        {
-            if (i == m_lockLevel)
-            {
-                lockPanels[i].SetActive(true);
-            }
-            else
-            {
-                lockPanels[i].SetActive(false);
-            }
-        }
+            lockPanels[i].SetActive(i == m_lockLevel);
     }
 
     void ChangeStarSign(int changeDirection)
     {
         m_currentStarsign += changeDirection;
+
         if(m_currentStarsign > starsigns.Length - 1)
-        {
             m_currentStarsign = 0;
-        }
+
         if(m_currentStarsign < 0)
-        {
             m_currentStarsign = starsigns.Length - 1;
-        }
+
         starsignImage.sprite = starsigns[m_currentStarsign];
-        m_safeAS.clip = audioClips[5];
-        m_safeAS.Play();
+        PlaySound(5);
     }
 
     void CheckStarsign()
@@ -343,9 +312,7 @@ public class SafeLocks : MonoBehaviour
                 CheckLocks();
             }
             else
-            {
-                LockedOut();
-            }
+                StartCoroutine(LockedOut());
         }
     }
 
@@ -361,23 +328,15 @@ public class SafeLocks : MonoBehaviour
                 CheckLocks();
             }
             else
-            {
-                LockedOut();
-            }
+                StartCoroutine(LockedOut());
         }
     }
 
     void CheckLocks()
     {
-        m_safeAS.clip = audioClips[4];
-        m_safeAS.Play();
+        PlaySound(4);
         m_locksUnlocked += 1;
-        if(m_passwordLock && m_sequenceLock && m_starsignLock)
-        {
-            m_allLocks = true;
-			OpenSafe ();
-            //unlockButton.interactable = true;
-        }
+        m_allLocks = m_passwordLock && m_sequenceLock && m_starsignLock;
         locksText.text = string.Format("({0}/3) Locks Unlocked", m_locksUnlocked);
     }
 
@@ -385,48 +344,42 @@ public class SafeLocks : MonoBehaviour
     {
         if (!m_sequenceLock)
         {
+            m_pressOrder = sequenceOrder[m_pressOrder] == currentButton ? m_pressOrder + 1 : 0;
+
             if (sequenceOrder[m_pressOrder] == currentButton)
             {
-                //correct
-                m_pressOrder += 1;
-                m_safeAS.clip = audioClips[3];
-                m_safeAS.pitch = (1 + (.1f * m_pressOrder));
-                m_safeAS.Play();
-                print("correct");
+                PlaySequenceSound();
+
                 if (m_pressOrder == sequenceOrder.Length)
                 {
                     m_sequenceLock = true;
                     lockTwoLight.sprite = lockLights[1];
                     CheckLocks();
-                    //unlocked
                 }
             }
             else
-            {
-                m_pressOrder = 0;
-                print("Wrong!");
-                LockedOut();
-                //reset
-            }
+                StartCoroutine(LockedOut());
         }
     }
 
     void OpenSafe()
     {
-        m_safeAS.clip = audioClips[7];
-        m_safeAS.Play();
+        PlaySound(7);
         m_safeAnim.SetTrigger("Unlocked");
-        //m_scientistWinScript.CheckWinCondition(0);
 		GetComponent<Safe>().EmptySafe();
-		print("win");
         LeaveSafe();
     }
 
-    void LockedOut()
+    void PlaySequenceSound()
     {
-        m_safeAS.clip = audioClips[2];
+        m_safeAS.pitch = (1 + (.1f * m_pressOrder));
+        PlaySound(3);
+        m_safeAS.pitch = 1;
+    }
+
+    void PlaySound(int soundNo)
+    {
+        m_safeAS.clip = audioClips[soundNo];
         m_safeAS.Play();
-        m_lockedOut = true;
-        lockedOutPanel.SetActive(true);
     }
 }

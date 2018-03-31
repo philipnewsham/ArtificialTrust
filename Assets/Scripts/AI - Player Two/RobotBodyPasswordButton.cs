@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-public class RobotBodyPasswordButton : MonoBehaviour {
+
+public class RobotBodyPasswordButton : MonoBehaviour
+{
     public AIPower aiPowerScript;
     private bool m_isDownloading = false;
     public int loadingValue;
@@ -10,12 +12,13 @@ public class RobotBodyPasswordButton : MonoBehaviour {
     private string m_password;
     public Image buttonDownloadBackground;
     private int m_currentPower;
+
     void Start()
     {
         m_thisButton = gameObject.GetComponent<Button>();
         m_currentLoadValue = loadingValue;
     }
-	// Use this for initialization
+
     public void DownloadingData()
     {
         m_isDownloading = !m_isDownloading;
@@ -37,8 +40,8 @@ public class RobotBodyPasswordButton : MonoBehaviour {
         {
             m_currentLoadValue -= m_currentPower * Time.deltaTime;
             float percentagedone = (100 - ((m_currentLoadValue/loadingValue)*100));
-            print(percentagedone);
             buttonDownloadBackground.fillAmount = percentagedone/100;
+
             if(m_currentLoadValue <= 0)
             {
                 m_isDownloading = false;

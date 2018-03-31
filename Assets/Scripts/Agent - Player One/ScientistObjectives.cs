@@ -35,21 +35,13 @@ public class ScientistObjectives : MonoBehaviour
 
     public void CheckLights(int lightsOn)
     {
-        if(lightsOn == m_lightAmount)
-            m_subGoalOne = true;
-        else
-            m_subGoalOne = false;
-
+        m_subGoalOne = (lightsOn == m_lightAmount);
         CheckObjectives();
     }
 
     public void CheckCameras(int camerasOn)
     {
-        if (camerasOn == m_cameraAmount)
-            m_subGoalTwo = true;
-        else
-            m_subGoalTwo = false;
-
+        m_subGoalTwo = (camerasOn == m_cameraAmount);
         CheckObjectives();
     }
 

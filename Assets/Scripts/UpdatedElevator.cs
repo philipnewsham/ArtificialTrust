@@ -43,7 +43,6 @@ public class UpdatedElevator : MonoBehaviour
     {
         if (other.gameObject.tag == "Agent")
         {
-            print("man entered");
             if (agentWinScript.completedMission == true)
             {
                 if (agentWinScript.mainObjective == 0)

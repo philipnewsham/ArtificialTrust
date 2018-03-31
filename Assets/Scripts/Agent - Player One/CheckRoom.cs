@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
 public class CheckRoom : MonoBehaviour
 {
     private string[] m_roomName = new string[9] { "Main Laboratory", "Small Office", "Server Room", "AI HUB", "Archives", "Dr. Kirkoff's Office","Corridor One", "Corridor Two", "Corridor Three" };
@@ -27,7 +28,7 @@ public class CheckRoom : MonoBehaviour
         "Follow the waypoints to the Server Room",
         "Work with the AI to solve the Geometry Puzzle"
     };
-	// Use this for initialization
+
 	void Start ()
     {
 		m_roomNo = 6;
@@ -36,10 +37,9 @@ public class CheckRoom : MonoBehaviour
         objectiveText.text = string.Format("Current Objective: {0}", m_objectives[m_currentObjectiveInt]);
 		mapButtonLength = mapLocations.Length;
 		m_locationSprites = new Sprite[mapButtonLength];
-		for (int i = 0; i < mapButtonLength; i++) 
-		{
+		for (int i = 0; i < mapButtonLength; i++)
 			m_locationSprites [i] = mapLocations [i].GetComponent<Image> ().sprite;
-		}
+
 		UpdateMapLocation ();
     }
     /*
@@ -71,7 +71,7 @@ public class CheckRoom : MonoBehaviour
     int m_roomNo = 1;
     bool m_checkingWait;
     bool m_checkingWaitAI;
-	// Update is called once per frame
+
 	void OnTriggerEnter (Collider other)    
     {
 	    if(other.gameObject.tag == "Room")
@@ -80,16 +80,9 @@ public class CheckRoom : MonoBehaviour
             roomNameText.text = m_roomName[m_roomNo];
 
 			UpdateMapLocation ();
-
-            if (m_roomNo == m_waitRoom)
-                m_checkingWait = true;
-            else
-                m_checkingWait = false;
-
-            if (m_roomNo == m_waitRoomAI)
-                m_checkingWaitAI = true;
-            else
-                m_checkingWaitAI = false;
+            
+            m_checkingWait = (m_roomNo == m_waitRoom);
+            m_checkingWaitAI = (m_roomNo == m_waitRoomAI);
 
             if(m_currentObjectiveInt == 0 && m_roomNo == 0)
             {
@@ -110,34 +103,19 @@ public class CheckRoom : MonoBehaviour
                 doorControllerScript.TutorialOpenDoors(7, false);
                 doorControllerScript.TutorialOpenDoors(6, false);
             }
-            
-            /*
-            if (m_currentObjectiveInt == (m_roomNo / 2) && m_introObjectives)
-            {
-                UpdateObjectiveText();
-            }
-            */
         }
 	}
 
 	void UpdateMapLocation()
 	{
-		for (int i = 0; i < mapButtonLength; i++) 
-		{
-			if (i == m_roomNo) 
-			{
-				mapLocations [i].GetComponent<Image> ().sprite = standingMan;
-			} 
-			else 
-			{
-				mapLocations [i].GetComponent<Image> ().sprite = m_locationSprites [i];
-			}
-		}
+		for (int i = 0; i < mapButtonLength; i++)
+            mapLocations[i].GetComponent<Image>().sprite = i == m_roomNo ? standingMan : m_locationSprites[i];
 	}
 
 
     private int m_waitRoom;
     private float m_waitTime;
+
     public void WaitObjective(int roomNo, float time)
     {
         m_waitRoom = roomNo;
@@ -155,6 +133,7 @@ public class CheckRoom : MonoBehaviour
     bool m_objectiveComplete;
     bool m_objectiveCompleteAI;
     public AIObjectives aiObjectiveScript;
+
     void Update()
     {
         m_roomTime[m_roomNo] += Time.deltaTime;
@@ -182,8 +161,6 @@ public class CheckRoom : MonoBehaviour
             objectiveText.text = "";
         }
         else
-        {
             objectiveText.text = string.Format("Current Objective: {0}", m_objectives[m_currentObjectiveInt]);
-        }
     }
 }

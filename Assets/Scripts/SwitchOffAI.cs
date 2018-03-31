@@ -18,9 +18,7 @@ public class SwitchOffAI : MonoBehaviour
     void Start()
     {
         for (int i = 0; i < 3; i++)
-        {
             m_multipliers[i] = 1f;
-        }
     }
 
     public void UpdateSubObjectives(bool[] objectivesComplete)
@@ -28,10 +26,7 @@ public class SwitchOffAI : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             subObjectives[i] = objectivesComplete[i];
-            if (subObjectives[i])
-                m_multipliers[i] = 2.5f;
-            else
-                m_multipliers[i] = 1f;
+            m_multipliers[i] = subObjectives[i] ? 2.5f : 1.0f;
         }
     }
 	
@@ -40,6 +35,7 @@ public class SwitchOffAI : MonoBehaviour
         m_countingDown[lever] = !m_countingDown[lever];
 		m_isFlippedOn [lever] = !m_isFlippedOn [lever];
 		leverAnimations [lever].SetTrigger ("Flip");
+
         if(m_countingDown[lever])
         {
             m_leverOn = true;
@@ -55,54 +51,44 @@ public class SwitchOffAI : MonoBehaviour
 					}
                 }
                 else
-                {
                     m_currentLever = i;
-                }
             }
         }
         else
-        {
             m_leverOn = false;
-        }
     }
-    // Update is called once per frame
+    
     bool[] m_leverComplete = new bool[3];
+
 	void Update ()
     {
-        if (m_leverOn)
+        if (!m_leverOn && !(m_countingDown[m_currentLever] && !m_leverComplete[m_currentLever]))
+            return;
+
+        m_leverTimers[m_currentLever] += Time.deltaTime * m_multipliers[m_currentLever];
+        percentImages[m_currentLever].fillAmount = m_leverTimers[m_currentLever] / maxTime;
+
+        if (m_leverTimers[m_currentLever] >= maxTime)
         {
-            if (m_countingDown[m_currentLever] && !m_leverComplete[m_currentLever])
-            {
-                m_leverTimers[m_currentLever] += Time.deltaTime * m_multipliers[m_currentLever];
-                percentImages[m_currentLever].fillAmount = m_leverTimers[m_currentLever] / maxTime;
-                if (m_leverTimers[m_currentLever] >= maxTime)
-                {
-                    m_leverComplete[m_currentLever] = true;
-					CheckLevers ();
-                }
-            }
+            m_leverComplete[m_currentLever] = true;
+			CheckLevers ();
         }
 	}
+
     public GameObject aiLoseScreen;
 	public GameObject aiLoseText;
 	public AgentWin agentWinScript;
+
     void CheckLevers()
     {
-        int goalsDone = 0;
         for (int i = 0; i < 3; i++)
         {
-            if (m_leverComplete[i])
-                goalsDone += 1;
-            else
-                break;
+            if (!m_leverComplete[i])
+                return;
         }
 
-        if (goalsDone == 3)
-        {
-			aiLoseScreen.SetActive (true);
-			aiLoseText.SetActive (true);
-			agentWinScript.UpdateWin (1);
-            //AI is switched off.
-        }
+		aiLoseScreen.SetActive (true);
+		aiLoseText.SetActive (true);
+		agentWinScript.UpdateWin (1);
     }
 }
