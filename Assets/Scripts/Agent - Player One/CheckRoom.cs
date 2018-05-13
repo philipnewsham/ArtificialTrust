@@ -4,18 +4,11 @@ using UnityEngine.UI;
 
 public class CheckRoom : MonoBehaviour
 {
-    private string[] m_roomName = new string[9] { "Main Laboratory", "Small Office", "Server Room", "AI HUB", "Archives", "Dr. Kirkoff's Office","Corridor One", "Corridor Two", "Corridor Three" };
     private float[] m_roomTime = new float[9];
-    public Text roomNameText;
     public Text objectiveText;
     private int m_currentObjectiveInt;
-
-	public Button[] mapLocations;
-	private Sprite[] m_locationSprites;
-	public Sprite standingMan;
+    
 	public Sprite wayPoint;
-
-	int mapButtonLength;
 
 	private AgentObjectiveText m_agentObjectiveTextScript;
     public DoorController doorControllerScript;
@@ -31,16 +24,9 @@ public class CheckRoom : MonoBehaviour
 
 	void Start ()
     {
-		m_roomNo = 6;
 		m_agentObjectiveTextScript = GetComponent<AgentObjectiveText> ();
-		roomNameText.text = m_roomName[m_roomNo];
         objectiveText.text = string.Format("Current Objective: {0}", m_objectives[m_currentObjectiveInt]);
-		mapButtonLength = mapLocations.Length;
-		m_locationSprites = new Sprite[mapButtonLength];
-		for (int i = 0; i < mapButtonLength; i++)
-			m_locationSprites [i] = mapLocations [i].GetComponent<Image> ().sprite;
-
-		UpdateMapLocation ();
+        StartCoroutine(TutorialWaypoints());
     }
     /*
     intro:
@@ -66,8 +52,7 @@ public class CheckRoom : MonoBehaviour
         5. Unlock the Safe
         6. Go to the elevator
     */
-
-    bool m_introObjectives = true;
+    
     int m_roomNo = 1;
     bool m_checkingWait;
     bool m_checkingWaitAI;
@@ -76,42 +61,10 @@ public class CheckRoom : MonoBehaviour
     {
 	    if(other.gameObject.tag == "Room")
         {
-            m_roomNo = other.gameObject.GetComponent<CurrentRoom>().currentRoom;
-            roomNameText.text = m_roomName[m_roomNo];
-
-			UpdateMapLocation ();
-            
             m_checkingWait = (m_roomNo == m_waitRoom);
             m_checkingWaitAI = (m_roomNo == m_waitRoomAI);
-
-            if(m_currentObjectiveInt == 0 && m_roomNo == 0)
-            {
-                UpdateObjectiveText();
-                doorControllerScript.TutorialOpenDoors(1, false);
-            }
-
-            if(m_currentObjectiveInt == 2 && m_roomNo == 1)
-            {
-                UpdateObjectiveText();
-                doorControllerScript.TutorialOpenDoors(0, false);
-                doorControllerScript.TutorialOpenDoors(7, false);
-            }
-
-            if(m_currentObjectiveInt == 4 && m_roomNo == 2)
-            {
-                UpdateObjectiveText();
-                doorControllerScript.TutorialOpenDoors(7, false);
-                doorControllerScript.TutorialOpenDoors(6, false);
-            }
         }
 	}
-
-	void UpdateMapLocation()
-	{
-		for (int i = 0; i < mapButtonLength; i++)
-            mapLocations[i].GetComponent<Image>().sprite = i == m_roomNo ? standingMan : m_locationSprites[i];
-	}
-
 
     private int m_waitRoom;
     private float m_waitTime;
@@ -124,6 +77,7 @@ public class CheckRoom : MonoBehaviour
 
     private int m_waitRoomAI;
     private float m_waitTimeAI;
+
     public void WaitObjectiveAI(int roomNo, float time)
     {
         m_waitRoomAI = roomNo;
@@ -137,6 +91,7 @@ public class CheckRoom : MonoBehaviour
     void Update()
     {
         m_roomTime[m_roomNo] += Time.deltaTime;
+
         if(m_checkingWait && m_roomTime[m_roomNo] >= m_waitTime && !m_objectiveComplete)
         {
             m_objectiveComplete = true;
@@ -154,13 +109,24 @@ public class CheckRoom : MonoBehaviour
     {
 		m_agentObjectiveTextScript.CompletedTask ();
         m_currentObjectiveInt += 1;
-        
-        if(m_currentObjectiveInt >= m_objectives.Length)
-        {
-            m_introObjectives = false;
-            objectiveText.text = "";
-        }
-        else
-            objectiveText.text = string.Format("Current Objective: {0}", m_objectives[m_currentObjectiveInt]);
+        objectiveText.text = m_currentObjectiveInt >= m_objectives.Length ? "" : string.Format("Current Objective: {0}", m_objectives[m_currentObjectiveInt]);
+    }
+
+    IEnumerator TutorialWaypoints()
+    {
+        CheckCurrentRoom checkRoom = FindObjectOfType<CheckCurrentRoom>();
+        yield return new WaitUntil(() => checkRoom.GetCurrentRoomNo() == 0);
+        UpdateObjectiveText();
+        doorControllerScript.TutorialOpenDoors(1, false);
+        yield return new WaitUntil(() => m_currentObjectiveInt == 2);
+        yield return new WaitUntil(() => checkRoom.GetCurrentRoomNo() == 1);
+        UpdateObjectiveText();
+        doorControllerScript.TutorialOpenDoors(0, false);
+        doorControllerScript.TutorialOpenDoors(7, false);
+        yield return new WaitUntil(() => m_currentObjectiveInt == 4);
+        yield return new WaitUntil(() => checkRoom.GetCurrentRoomNo() == 2);
+        UpdateObjectiveText();
+        doorControllerScript.TutorialOpenDoors(7, false);
+        doorControllerScript.TutorialOpenDoors(6, false);
     }
 }

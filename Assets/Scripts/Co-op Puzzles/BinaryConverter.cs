@@ -9,9 +9,11 @@ public class BinaryConverter : MonoBehaviour
 
     public string word;
     private string m_binaryWord;
+
 	void Start ()
     {
 	    char[] wordToChar = word.ToCharArray();
+
         for (int i = 0; i < wordToChar.Length; i++)
         {
             for (int j = 0; j < letters.Length; j++)
@@ -24,7 +26,6 @@ public class BinaryConverter : MonoBehaviour
             }
         }
 
-        //print(m_binaryWord);
 		GetComponent<Text> ().text = m_binaryWord;
 	}
 

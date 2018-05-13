@@ -97,9 +97,7 @@ public class LightController : MonoBehaviour
         for (int i = 0; i < m_lightOn.Length; i++)
         {
             if (m_lightOn[i])
-            {
                 lightsOnInt += 1;
-            }
         }
 		agentObjectiveScript.LightsOnObjective(0,lightsOnInt,true);
         m_aiObjectiveScript.LightsOnObjective(0, lightsOnInt, true);
@@ -112,10 +110,8 @@ public class LightController : MonoBehaviour
 	{
 		for (int i = 0; i < lightButtons.Length; i++) 
 		{
-			if (!m_lightOn [i]) 
-			{
+			if (!m_lightOn [i])
 				lightButtons [i].interactable = false;
-			}
 		}
 	}
 
@@ -124,9 +120,7 @@ public class LightController : MonoBehaviour
         for (int i = 0; i < lightButtons.Length; i++)
         {
             if (!lightButtons[i].interactable)
-            {
                 lightButtons[i].interactable = true;
-            }
         }
     }
 }

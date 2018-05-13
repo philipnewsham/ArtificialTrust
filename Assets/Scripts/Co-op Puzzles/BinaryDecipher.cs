@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+
 public class BinaryDecipher : MonoBehaviour 
 {
     public GameObject completedPanel;
@@ -75,20 +76,26 @@ public class BinaryDecipher : MonoBehaviour
     public GameObject lockOutPanel;
     public GameObject letterButton;
     public GameObject wordPanel;
-    public string[] possibleWord = new string[7]
-        {
-            "apple",
-            "march",
-            "mouse",
-            "clock",
-            "paint",
-			"perch",
-			"count"
-        };
+
+    public List<string> possibleWord = new List<string>()
+    {
+        "apple",
+        "march",
+        "mouse",
+        "paint",
+		"perch",
+        "goals",
+        "human",
+        "write",
+        "quick",
+        "house",
+        "while"
+    };
 
 	public Animator cursorAnim;
 	public Text timerText;
     public ChangeTextColour changeTextColourScript;
+
     void Start()
     {
         CreateWord();
@@ -96,54 +103,35 @@ public class BinaryDecipher : MonoBehaviour
 
     void CreateWord()
     {
-        string currentWord = possibleWord[Random.Range(0, possibleWord.Length)];
-        char[] currentWordSplit = currentWord.ToCharArray();
-		//List<Button> usingButtons = new List<Button>();
-        for (int i = 0; i < currentWordSplit.Length; i++)
+        //get random word
+        string currentWord = possibleWord[Random.Range(0, possibleWord.Count)];
+        List<string> binaryWord = GetComponent<ConvertToBinary>().ConvertWord(currentWord);
+
+        for (int i = 0; i < binaryWord.Count; i++)
         {
-            GameObject currentButton = Instantiate(letterButton, transform.position, Quaternion.identity) as GameObject;
-            currentButton.transform.parent = wordPanel.transform;
-            string currentLetter = currentWordSplit[i].ToString();
-            for (int j = 0; j < m_alphabet.Length; j++)
-            {
-                if (currentLetter == m_alphabet[j])
-                {
-                    currentButton.GetComponentInChildren<Text>().text = m_binaryAlphabet[j];
-                }
-            }
-			backupButtons [i] = currentButton.GetComponent<Button>();
+            GameObject currentButton = Instantiate(letterButton, wordPanel.transform);
+            currentButton.GetComponentInChildren<Text>().text = binaryWord[i];
+            backupButtons[i] = currentButton.GetComponent<Button>();
         }
-
-
     }
+
 	public Text currentBinaryText;
+
 	public void ClickedButton(string thisText)
 	{
 		currentBinaryText.text = thisText;
 		//check which letter it is (i.e 0110 0001 == a)
 		for (int i = 0; i < m_binaryAlphabet.Length; i++) 
 		{
-			if (thisText == m_binaryAlphabet [i]) 
-			{
-				//Debug.LogFormat ("This is the {0} letter of the alphabet", i + 1);
+			if (thisText == m_binaryAlphabet [i])
 				m_currentLetter = i;
-			}
 		}
 
 		//change materials to light up current letter
-		for (int i = 0; i < letterCubes.Length; i++) 
-		{
-			if (m_currentLetter == i) 
-			{
-				letterCubes [i].GetComponent<Renderer> ().material = letterCubeMaterials [1];
-			} 
-			else 
-			{	
-				letterCubes [i].GetComponent<Renderer> ().material = letterCubeMaterials [0];
-			}
-		}
-
+		for (int i = 0; i < letterCubes.Length; i++)
+            letterCubes[i].GetComponent<Renderer>().material = letterCubeMaterials[m_currentLetter == i ? 1 : 0];
 	}
+
 	bool m_isEnabled;
 	float m_countdown = 180f;
 
@@ -151,28 +139,31 @@ public class BinaryDecipher : MonoBehaviour
 	{
 		m_isEnabled = !m_isEnabled;
 	}
+
 	void Update()
 	{
-		if (Input.anyKeyDown) 
-		{
-			CheckKeyPress (Input.inputString);
-		}
+		if (Input.anyKeyDown)
+			CheckKeyPress(Input.inputString);
+
         if(Input.GetKeyDown(KeyCode.Return))
-        {
             CheckLetter();
-        }
-		if (m_isEnabled) 
-		{
-			m_countdown -= Time.deltaTime;
-			timerText.text = string.Format("{0}:{1}", Mathf.Floor(m_countdown/ 60f),Mathf.Floor(m_countdown % 60f));
-			if (m_countdown <= 0f) {
-				m_isEnabled = false;
-				timerText.text = "<color=red>00:00</color>";
-			}
+
+        if (!m_isEnabled)
+            return;
+        
+		m_countdown -= Time.deltaTime;
+		timerText.text = string.Format("{0}:{1}", Mathf.Floor(m_countdown/ 60f),Mathf.Floor(m_countdown % 60f));
+
+		if (m_countdown <= 0f)
+        {
+			m_isEnabled = false;
+			timerText.text = "<color=red>00:00</color>";
 		}
 	}
+
     public Text showLetterText;
     private bool m_correctLetter;
+
 	void CheckKeyPress(string currentKey)
 	{
 		for (int i = 0; i < m_alphabet.Length; i++) 
@@ -181,18 +172,7 @@ public class BinaryDecipher : MonoBehaviour
 			{
                 showLetterText.text = m_alphabet[i];
 				cursorAnim.SetBool ("LetterTyped", true);
-				if (Input.inputString == m_alphabet [m_currentLetter]) 
-				{
-					//print ("right letter!");
-                    m_correctLetter = true;
-					//KeyCorrect ();
-				} 
-				else 
-				{
-					//print ("wrong letter!");
-                    m_correctLetter = false;
-					//KeyWrong ();
-				}
+                m_correctLetter = (Input.inputString == m_alphabet[m_currentLetter]);
 			}
 		}
 	}
@@ -200,18 +180,17 @@ public class BinaryDecipher : MonoBehaviour
     public void CheckLetter()
     {
         if(m_correctLetter)
-        {
             KeyCorrect();
-        }
         else
-        {
             KeyWrong();
-        }
+
         showLetterText.text = "";
 		cursorAnim.SetBool ("LetterTyped", false);
     }
+
     int m_lettersCorrect = 0;
     public Text[] sideButtons;
+
 	void KeyCorrect()
 	{
         for (int i = 0; i < backupButtons.Length; i++)
@@ -228,39 +207,35 @@ public class BinaryDecipher : MonoBehaviour
             if(sideButtons[i].text == m_binaryAlphabet[m_currentLetter])
             {
                 sideButtons[i].text = m_alphabet[m_currentLetter];
-				sideButtons [i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (10, 30);
+				sideButtons[i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (10, 30);
             }
         }
-
-		m_lettersCorrect = 0;
+        
 		for (int i = 0; i < 5; i++) 
 		{
-			if (backupButtons [i].interactable == false)
-				m_lettersCorrect += 1;
+            if (backupButtons[i].interactable == false)
+                return;
 		}
-		if (m_lettersCorrect == backupButtons.Length)
-		{
-			UnlockNextPuzzle();
-			//CheckRemainingLetters ();
-			StartCoroutine("CheckingRemainingLetters");
-		}
+
+		UnlockNextPuzzle();
+		StartCoroutine("CheckingRemainingLetters");
 	}
+
     public DoorController doorController;
     public Button nextPuzzleButton;
     public GameObject nextWayfinder;
+
+    private bool isCompleted = false;
+
     void UnlockNextPuzzle()
     {
-        //print("unlocknextpuzzle");
-        //doorController.Locking(5);
-        //doorController.Locking(1);
-        completedPanel.SetActive(true);
-        doorController.TutorialOpenDoors(7, true);
-        doorController.TutorialOpenDoors(0, true);
-        //doorController.TutorialOpenDoors(4, false);
-        nextPuzzleButton.interactable = true;
-        nextWayfinder.SetActive(true);
 		m_isEnabled = false;
-        changeTextColourScript.AnimationTrigger();
+        isCompleted = true;
+    }
+
+    public bool IsCompleted()
+    {
+        return isCompleted;
     }
 
 	void CheckRemainingLetters()
@@ -269,10 +244,10 @@ public class BinaryDecipher : MonoBehaviour
 		{
 			for (int i = 0; i < sideButtons.Length; i++) 
 			{
-				if (sideButtons [i].text == m_binaryAlphabet [j]) {
+				if (sideButtons [i].text == m_binaryAlphabet [j])
+                {
 					sideButtons [i].text = m_alphabet [j];
 					sideButtons [i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (10, 30);
-					//sideButtons [i].interactable = false;
 				}
 			}
 		}
@@ -281,25 +256,26 @@ public class BinaryDecipher : MonoBehaviour
 	IEnumerator CheckingRemainingLetters()
 	{
 		int i = 0;
-		while (i < m_binaryAlphabet.Length) {
+		while (i < m_binaryAlphabet.Length)
+        {
 			for (int j = 0; j < sideButtons.Length; j++) 
 			{
-				if (sideButtons [j].text == m_binaryAlphabet [i]) {
+				if (sideButtons [j].text == m_binaryAlphabet [i])
+                {
 					sideButtons [j].text = m_alphabet [i];
 					sideButtons [j].GetComponent<RectTransform> ().sizeDelta = new Vector2 (10, 30);
-					//sideButtons [i].interactable = false;
 				}
 			}
 			i += 1;
 			yield return new WaitForSeconds (0.2f);
 		}
 	}
+
     public ChallengeLockOut challengeLockOutScript;
+
 	void KeyWrong()
 	{
         challengeLockOutScript.BeginCountdown(5f);
-        //lockOutPanel.SetActive(true);
-        //Invoke("LockOutDisabled", 5f);
 	}
 
     void LockOutDisabled()
