@@ -16,12 +16,8 @@ public class AgentObjectiveText : MonoBehaviour
 
 	public void CompletedTask()
 	{
-		objectives [m_currentObjective].fontSize = m_sizes [2];
+		objectives [m_currentObjective].fontSize = m_sizes [m_currentObjective < objectives.Length?0:2];
 		objectives [m_currentObjective].fontStyle = FontStyle.Italic;
 		m_currentObjective += 1;
-		if (m_currentObjective < objectives.Length) 
-		{
-			objectives [m_currentObjective].fontSize = m_sizes [0];
-		}
 	}
 }

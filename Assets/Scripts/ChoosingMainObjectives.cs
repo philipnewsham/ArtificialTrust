@@ -42,8 +42,6 @@ public class ChoosingMainObjectives : MonoBehaviour
         "Pretend to go along with what their objective is, and sabotage them every step of the way.",
         "Write them long messages."
     };
-
-
     //Two main objectives - agent
     private string[] m_agentObjectiveString = new string[2]
     {
